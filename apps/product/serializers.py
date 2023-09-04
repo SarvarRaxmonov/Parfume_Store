@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from .models import (Banner, Product, ProductBrand, ProductCategory,
-                     ProductImage, ProductTag, ProductType, Section, Story,
-                     StoryContent, Volume)
+from apps.product.models import (Banner, Product, ProductBrand,
+                                 ProductCategory, ProductImage, ProductTag,
+                                 ProductType, Section, Story, StoryContent,
+                                 ViewedStory, Volume)
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -42,6 +43,28 @@ class BannerSerializer(serializers.ModelSerializer):
         fields = ("id", "image", "product", "section", "is_main")
 
 
+class StoryContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoryContent
+        fields = ("id", "name", "video", "photo")
+
+
+class StorySerializer(serializers.ModelSerializer):
+    content = StoryContentSerializer(many=True)
+    is_full_viewed = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Story
+        fields = ("id", "name", "content", "is_full_viewed")
+
+    def get_is_full_viewed(self, obj):
+        device_id = 2222
+        view = ViewedStory.objects.filter(id=device_id, story=obj.id)
+        if obj.content.count() == view.count():
+            return True
+        return False
+
+
 # =================================================================
 
 
@@ -79,15 +102,3 @@ class VolumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volume
         fields = ("id", "images", "size", "type", "is_available")
-
-
-class StoryContentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StoryContent
-        fields = ("id", "name", "video", "photo")
-
-
-class StorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Story
-        fields = ("id", "name", "content")
