@@ -42,7 +42,10 @@ class User(AbstractUser, BaseModel):
         max_length=16,
         unique=True,
     )
+<<<<<<< HEAD:apps/user/models/users.py
     username = models.CharField(verbose_name=_("username"), max_length=150, unique=True, blank=True, null=True)
+=======
+>>>>>>> main:apps/user/models.py
     email = models.EmailField(verbose_name=_("Email"), null=True, blank=True)
 
     objects = UserManager()
@@ -65,7 +68,7 @@ class User(AbstractUser, BaseModel):
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField("user.User", on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="profile")
     avatar = models.ImageField(verbose_name=_("Avatar"), upload_to="profile/pictures", null=True, blank=True)
     region = models.ForeignKey(
         "user.Region",
