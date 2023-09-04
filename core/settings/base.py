@@ -14,6 +14,7 @@ from pathlib import Path
 
 import environ
 
+from core.ckeditor import *  # noqa
 from core.jazzmin_conf import *  # noqa
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -54,12 +55,11 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_yasg",
     "corsheaders",
+    "ckeditor_uploader",
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",

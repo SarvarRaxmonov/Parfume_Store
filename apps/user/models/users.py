@@ -1,11 +1,11 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
-from django.contrib.auth.hashers import make_password
-from phonenumber_field.modelfields import PhoneNumberField
-from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
 from apps.common.models import BaseModel
 
 
@@ -41,7 +41,7 @@ class User(AbstractUser, BaseModel):
         verbose_name=_("Phone number"),
         max_length=16,
         unique=True,
-        )
+    )
     email = models.EmailField(verbose_name=_("Email"), null=True, blank=True)
 
     objects = UserManager()
@@ -84,12 +84,6 @@ class Profile(BaseModel):
 
 class Region(BaseModel):
     name = models.CharField(max_length=255, verbose_name=_("Name"))
-    country = models.ForeignKey(
-        "user.District",
-        related_name="regions",
-        on_delete=models.CASCADE,
-        verbose_name=_("Country"),
-    )
 
     class Meta:
         verbose_name = _("Region")
@@ -100,6 +94,14 @@ class Region(BaseModel):
 
 
 class District(BaseModel):
+    region = models.ForeignKey(
+        "user.Region",
+        related_name="district",
+        on_delete=models.CASCADE,
+        verbose_name=_("Region"),
+        null=True,
+        blank=True,
+    )
     name = models.CharField(max_length=255, verbose_name=_("Name"))
 
     class Meta:
