@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from apps.common.models import BaseModel
@@ -5,8 +6,8 @@ from apps.product.choices import CurrencyChoices, VolumeChoices
 
 
 class ProductImage(models.Model):
-    file = models.FileField()
-    url = models.URLField()
+    file = models.FileField(blank=True)
+    url = models.URLField(blank=True)
 
     def __str__(self):
         return self.file.name
@@ -75,35 +76,43 @@ class Product(BaseModel):
     images = models.ManyToManyField(ProductImage)
     section = models.ManyToManyField(Section)
     tags = models.ManyToManyField(ProductTag)
-    type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
-    volume = models.ManyToManyField(Volume)
+    type = models.ForeignKey(ProductType, on_delete=models.CASCADE, blank=True)
+    volume = models.ManyToManyField(Volume, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Banner(BaseModel):
-    image = models.FileField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    image = models.FileField(blank=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, null=True)
     is_main = models.BooleanField()
 
     def __str__(self):
-        return f"Banner for {self.product.name or self.section.name}"
+        return f"Banner for {self.product or self.section}"
 
     def save(self, *args, **kwargs):
         if self.product and self.section:
-            raise ValueError("Choose either product or section, not both.")
+            raise ValidationError("Choose either product or section, not both.")
         elif not self.section and not self.product:
-            raise ValueError("Choose either product or section.")
+            raise ValidationError("Choose either product or section.")
         else:
             super().save(*args, **kwargs)
 
 
 class StoryContent(BaseModel):
     name = models.CharField(max_length=255)
-    video = models.FileField()
-    photo = models.FileField()
+    video = models.FileField(blank=True, null=True)
+    photo = models.FileField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.video and self.photo:
+            raise ValidationError("Choose either photo or video, not both.")
+        elif not self.video and not self.photo:
+            raise ValidationError("Choose either video or photo.")
+        else:
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -112,6 +121,15 @@ class StoryContent(BaseModel):
 class Story(BaseModel):
     name = models.CharField(max_length=255)
     content = models.ManyToManyField(StoryContent)
+    is_main = models.BooleanField()
 
     def __str__(self):
         return self.name
+
+
+class ViewedStory(BaseModel):
+    story = models.ForeignKey(StoryContent, on_delete=models.CASCADE, blank=True, null=True)
+    device_id = models.CharField(max_length=900)
+
+    def __str__(self):
+        return self.story.name

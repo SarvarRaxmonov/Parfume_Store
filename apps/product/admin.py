@@ -1,8 +1,9 @@
 from django.contrib import admin
 
-from .models import (Banner, Product, ProductBrand, ProductCategory,
-                     ProductImage, ProductTag, ProductType, Section, Story,
-                     StoryContent, Volume)
+from apps.product.models import (Banner, Product, ProductBrand,
+                                 ProductCategory, ProductImage, ProductTag,
+                                 ProductType, Section, Story, StoryContent,
+                                 ViewedStory, Volume)
 
 
 @admin.register(ProductImage)
@@ -47,7 +48,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ("image", "product")
+    list_display = ("id", "product")
 
 
 @admin.register(StoryContent)
@@ -58,3 +59,8 @@ class StoryContentAdmin(admin.ModelAdmin):
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
+
+
+@admin.register(ViewedStory)
+class ViewedStoryAdmin(admin.ModelAdmin):
+    list_display = ("story", "device_id")
