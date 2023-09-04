@@ -45,7 +45,13 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-CUSTOM_APPS = ["apps.common", "apps.product"]
+
+CUSTOM_APPS = [
+    "apps.common",
+    "apps.user",
+    "apps.product",
+]
+
 
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -150,6 +156,7 @@ STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+AUTH_USER_MODEL = "user.User"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
