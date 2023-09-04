@@ -1,6 +1,7 @@
 from django.contrib import admin
-
+from apps.user.models.notifications import Notification, ReadNotification
 from apps.user.models import District, Profile, Region, User
+
 
 
 @admin.register(User)
@@ -21,3 +22,15 @@ class RegionAdmin(admin.ModelAdmin):
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
+
+
+
+@admin.register(Notification)
+class AdminNotification(admin.ModelAdmin):
+    list_display = ("id", "title")
+
+
+@admin.register(ReadNotification)
+class AdminReadNotification(admin.ModelAdmin):
+    list_display = ("id", "user")
+

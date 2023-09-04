@@ -42,6 +42,10 @@ class User(AbstractUser, BaseModel):
         max_length=16,
         unique=True,
     )
+<<<<<<< HEAD:apps/user/models/users.py
+    username = models.CharField(verbose_name=_("username"), max_length=150, unique=True, blank=True, null=True)
+=======
+>>>>>>> main:apps/user/models.py
     email = models.EmailField(verbose_name=_("Email"), null=True, blank=True)
 
     objects = UserManager()
@@ -84,12 +88,6 @@ class Profile(BaseModel):
 
 class Region(BaseModel):
     name = models.CharField(max_length=255, verbose_name=_("Name"))
-    country = models.ForeignKey(
-        "user.District",
-        related_name="regions",
-        on_delete=models.CASCADE,
-        verbose_name=_("Country"),
-    )
 
     class Meta:
         verbose_name = _("Region")
@@ -100,6 +98,14 @@ class Region(BaseModel):
 
 
 class District(BaseModel):
+    region = models.ForeignKey(
+        "user.Region",
+        related_name="district",
+        on_delete=models.CASCADE,
+        verbose_name=_("Region"),
+        null=True,
+        blank=True,
+    )
     name = models.CharField(max_length=255, verbose_name=_("Name"))
 
     class Meta:
