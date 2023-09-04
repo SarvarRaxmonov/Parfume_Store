@@ -42,10 +42,8 @@ class User(AbstractUser, BaseModel):
         max_length=16,
         unique=True,
     )
-<<<<<<< HEAD:apps/user/models/users.py
+
     username = models.CharField(verbose_name=_("username"), max_length=150, unique=True, blank=True, null=True)
-=======
->>>>>>> main:apps/user/models.py
     email = models.EmailField(verbose_name=_("Email"), null=True, blank=True)
 
     objects = UserManager()
