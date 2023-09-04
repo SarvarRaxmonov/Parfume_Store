@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework.generics import ListAPIView
 
-# Create your views here.
+from .models import Banner
+from .serializers import BannerSerializer
+
+
+class LatestBannersListView(ListAPIView):
+    queryset = Banner.objects.order_by("-created_at")[:5]
+    serializer_class = BannerSerializer

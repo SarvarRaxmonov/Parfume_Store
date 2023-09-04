@@ -50,11 +50,13 @@ CUSTOM_APPS = [
     "apps.common",
     "apps.user",
     "apps.product",
+    "apps.cart",
 ]
 
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "phonenumber_field",
     "drf_yasg",
     "corsheaders",
 ]

@@ -91,6 +91,14 @@ class Banner(BaseModel):
     def __str__(self):
         return f"Banner for {self.product.name or self.section.name}"
 
+    def save(self, *args, **kwargs):
+        if self.product and self.section:
+            raise ValueError("Choose either product or section, not both.")
+        elif not self.section and not self.product:
+            raise ValueError("Choose either product or section.")
+        else:
+            super().save(*args, **kwargs)
+
 
 class StoryContent(BaseModel):
     name = models.CharField(max_length=255)

@@ -5,6 +5,46 @@ from .models import (Banner, Product, ProductBrand, ProductCategory,
                      StoryContent, Volume)
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = (
+            "id",
+            "name",
+            "price",
+            "currency",
+            "is_recommended",
+            "is_available",
+            "brand",
+            "description",
+            "discount",
+            "expire_time",
+            "images",
+            "section",
+            "tags",
+            "type",
+            "volume",
+        )
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = ("id", "name", "icon", "category", "is_main")
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    section = SectionSerializer()
+
+    class Meta:
+        model = Banner
+        fields = ("id", "image", "product", "section", "is_main")
+
+
+# =================================================================
+
+
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
@@ -15,12 +55,6 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = ("id", "name", "icon")
-
-
-class SectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Section
-        fields = ("id", "name", "icon", "category", "is_main")
 
 
 class ProductBrandSerializer(serializers.ModelSerializer):
@@ -45,34 +79,6 @@ class VolumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volume
         fields = ("id", "images", "size", "type", "is_available")
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = (
-            "id",
-            "name",
-            "price",
-            "currency",
-            "is_recommended",
-            "is_available",
-            "brand",
-            "description",
-            "discount",
-            "expire_time",
-            "images",
-            "section",
-            "tags",
-            "type",
-            "volume",
-        )
-
-
-class BannerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Banner
-        fields = ("id", "image", "product", "section", "is_main")
 
 
 class StoryContentSerializer(serializers.ModelSerializer):

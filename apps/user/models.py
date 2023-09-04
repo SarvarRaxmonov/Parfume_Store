@@ -1,11 +1,11 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
-from django.contrib.auth.hashers import make_password
-from phonenumber_field.modelfields import PhoneNumberField
-from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
 from apps.common.models import BaseModel
 
 
@@ -41,7 +41,7 @@ class User(AbstractUser, BaseModel):
         verbose_name=_("Phone number"),
         max_length=16,
         unique=True,
-        )
+    )
     email = models.EmailField(verbose_name=_("Email"), null=True, blank=True)
 
     objects = UserManager()
@@ -64,7 +64,7 @@ class User(AbstractUser, BaseModel):
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField("user.User", on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="profile")
     avatar = models.ImageField(verbose_name=_("Avatar"), upload_to="profile/pictures", null=True, blank=True)
     region = models.ForeignKey(
         "user.Region",
