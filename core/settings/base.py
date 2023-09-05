@@ -46,22 +46,17 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-
 CUSTOM_APPS = [
     "apps.common",
     "apps.user",
-    "apps.product",
     "apps.cart",
+    "apps.product",
 ]
-
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "phonenumber_field",
     "drf_yasg",
     "corsheaders",
-    "ckeditor",
-    "ckeditor_uploader",
 ]
 
 REST_FRAMEWORK = {

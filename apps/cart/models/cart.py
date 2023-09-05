@@ -5,7 +5,19 @@ from django.utils.translation import gettext_lazy as _
 from apps.user.models import User
 
 
+class Region(models.Model):
+    name = models.CharField(max_length=125, verbose_name=_("Name"))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Region"
+        verbose_name_plural = "Regions"
+
+
 class District(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
@@ -16,21 +28,10 @@ class District(models.Model):
         verbose_name_plural = "Districts"
 
 
-class Region(models.Model):
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
-    name = models.CharField(max_length=125, verbose_name=_("Name"))
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Region"
-        verbose_name_plural = "Regionsl"
-
-
 class Accreditation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    region = models.ForeignKey(Region, related_name="region", on_delete=models.CASCADE)
+    district = models.ForeignKey(District, related_name="district", on_delete=models.CASCADE)
     full_name = models.CharField(max_length=125, verbose_name=_("Full Name"))
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
