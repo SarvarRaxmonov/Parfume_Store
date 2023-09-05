@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
     "drf_yasg",
     "corsheaders",
     "phonenumber_field",
+    "ckeditor",
 ]
 
 REST_FRAMEWORK = {
