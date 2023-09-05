@@ -2,10 +2,11 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.common.models import BaseModel
 from apps.user.models import User
 
 
-class Region(models.Model):
+class Region(BaseModel):
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
@@ -16,7 +17,7 @@ class Region(models.Model):
         verbose_name_plural = "Regions"
 
 
-class District(models.Model):
+class District(BaseModel):
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
@@ -28,7 +29,7 @@ class District(models.Model):
         verbose_name_plural = "Districts"
 
 
-class Accreditation(models.Model):
+class Accreditation(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     region = models.ForeignKey(Region, related_name="region", on_delete=models.CASCADE)
     district = models.ForeignKey(District, related_name="district", on_delete=models.CASCADE)
@@ -50,13 +51,13 @@ class Accreditation(models.Model):
         verbose_name_plural = "Accreditations"
 
 
-class BankCard(models.Model):
+class BankCard(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE)
     number = models.IntegerField(verbose_name=_("number"))
 
 
-class UserPhone(models.Model):
+class UserPhone(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)  # Adjust the max length as needed
@@ -69,7 +70,7 @@ class UserPhone(models.Model):
         verbose_name_plural = "UserPhones"
 
 
-class PaymentMethod(models.Model):
+class PaymentMethod(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE)
     name = models.CharField(max_length=125)
@@ -82,7 +83,7 @@ class PaymentMethod(models.Model):
         verbose_name_plural = "PaymentMethods"
 
 
-class Cart(models.Model):
+class Cart(BaseModel):
     title = models.CharField(max_length=125, verbose_name=_("title"))
     image = models.ImageField(upload_to="cart_images/", verbose_name=_("image"))
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("price"))
