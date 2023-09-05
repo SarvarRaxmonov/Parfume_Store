@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_yasg",
     "corsheaders",
+    "phonenumber_field",
 ]
 
 REST_FRAMEWORK = {
