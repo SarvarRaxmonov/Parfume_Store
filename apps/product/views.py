@@ -1,7 +1,8 @@
 from rest_framework.generics import ListAPIView
 
-from apps.product.models import Banner, Story
-from apps.product.serializers import BannerSerializer, StorySerializer
+from apps.product.models import Banner, Product, Story
+from apps.product.serializers import (BannerSerializer, ProductSerializer,
+                                      StorySerializer)
 
 
 class LatestBannersListView(ListAPIView):
@@ -9,6 +10,11 @@ class LatestBannersListView(ListAPIView):
     serializer_class = BannerSerializer
 
 
-class StoryContentListView(ListAPIView):
-    queryset = Story.objects.all()
+class StoryListView(ListAPIView):
+    queryset = Story.objects.exclude(is_main=False)
     serializer_class = StorySerializer
+
+
+class RecommendedProductListView(ListAPIView):
+    queryset = Product.objects.exclude(is_recommended=False)
+    serializer_class = ProductSerializer
