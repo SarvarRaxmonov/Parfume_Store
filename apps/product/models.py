@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 from apps.common.models import BaseModel
@@ -19,6 +20,14 @@ class ProductCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProductCategoryViewed(BaseModel):
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name="view_to_category")
+    device_id = models.CharField(max_length=900)
+
+    def __str__(self):
+        return self.category.name
 
 
 class Section(models.Model):
@@ -71,12 +80,12 @@ class Product(BaseModel):
     is_available = models.BooleanField()
     brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE)
     description = models.TextField()
-    discount = models.IntegerField()
+    discount = models.IntegerField(validators=[MaxValueValidator(100)])
     expire_time = models.DateTimeField()
     images = models.ManyToManyField(ProductImage)
     section = models.ManyToManyField(Section)
     tags = models.ManyToManyField(ProductTag)
-    type = models.ForeignKey(ProductType, on_delete=models.CASCADE, blank=True)
+    type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
     volume = models.ManyToManyField(Volume, blank=True)
 
     def __str__(self):
@@ -113,7 +122,7 @@ class StoryContent(BaseModel):
 
 class Story(BaseModel):
     name = models.CharField(max_length=255)
-    content = models.ManyToManyField(StoryContent)
+    content = models.ManyToManyField(StoryContent, related_name="story_to_content")
     is_main = models.BooleanField()
 
     def __str__(self):
@@ -121,7 +130,7 @@ class Story(BaseModel):
 
 
 class ViewedStory(BaseModel):
-    story = models.ForeignKey(StoryContent, on_delete=models.CASCADE, blank=True, null=True)
+    story = models.ForeignKey(StoryContent, on_delete=models.CASCADE)
     device_id = models.CharField(max_length=900)
 
     def __str__(self):

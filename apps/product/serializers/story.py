@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.product.models import Story, StoryContent, ViewedStory
+from apps.product.utils import generate_device_id
 
 
 class StoryContentSerializer(serializers.ModelSerializer):
@@ -18,8 +19,9 @@ class StorySerializer(serializers.ModelSerializer):
         fields = ("id", "name", "content", "is_full_viewed")
 
     def get_is_full_viewed(self, obj):
-        device_id = 2222
-        view = ViewedStory.objects.filter(id=device_id, story=obj.id)
+        device_id = generate_device_id()
+        view = ViewedStory.objects.filter(device_id=device_id, story__story_to_content__id=obj.id)
+        print(obj.content.count(), view.count())
         if obj.content.count() == view.count():
             return True
         return False

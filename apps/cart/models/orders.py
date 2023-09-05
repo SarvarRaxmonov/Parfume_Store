@@ -17,8 +17,8 @@ class Liked(BaseModel):
         return self.user.username
 
     class Meta:
-        verbose_name = 'Liked'
-        verbose_name_plural = 'Liked'
+        verbose_name = "Liked"
+        verbose_name_plural = "Liked"
 
 
 class Order(BaseModel):
@@ -36,8 +36,8 @@ class Order(BaseModel):
         return self.type
 
     class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = 'Orders'
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
 
 
 class Review(BaseModel):
@@ -50,5 +50,5 @@ class Review(BaseModel):
         return self.user.username
 
     class Meta:
-        verbose_name = 'Review'
-        verbose_name_plural = 'Reviews'
+        verbose_name = "Review"
+        verbose_name_plural = "Reviews"

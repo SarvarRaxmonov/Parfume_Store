@@ -1,9 +1,10 @@
 from django.contrib import admin
 
 from apps.product.models import (Banner, Product, ProductBrand,
-                                 ProductCategory, ProductImage, ProductTag,
-                                 ProductType, Section, Story, StoryContent,
-                                 ViewedStory, Volume)
+                                 ProductCategory, ProductCategoryViewed,
+                                 ProductImage, ProductTag, ProductType,
+                                 Section, Story, StoryContent, ViewedStory,
+                                 Volume)
 
 
 @admin.register(ProductImage)
@@ -14,6 +15,11 @@ class ProductImageAdmin(admin.ModelAdmin):
 @admin.register(ProductCategory)
 class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
+
+
+@admin.register(ProductCategoryViewed)
+class ProductCategoryViewedAdmin(admin.ModelAdmin):
+    list_display = ("category", "device_id")
 
 
 @admin.register(Section)
