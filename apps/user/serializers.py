@@ -1,15 +1,13 @@
 from rest_framework import serializers
-from apps.user.models.users import User
 from rest_framework.exceptions import ValidationError
+
+from apps.user.models.users import User
 
 
 class SendCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "id",
-            "phone_number"
-        )
+        fields = ("id", "phone_number")
 
     @staticmethod
     def check_user_exists(phone):
@@ -20,3 +18,8 @@ class SendCodeSerializer(serializers.ModelSerializer):
         phone_number = data.get("phone_number")
         self.check_user_exists(phone_number)
         return data
+
+
+class VerificationRegistrationCodeSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    session = serializers.CharField()
