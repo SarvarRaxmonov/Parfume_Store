@@ -38,7 +38,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Volume)
 class VolumeAdmin(admin.ModelAdmin):
-    list_display = ("size", "type")
+    list_display = ("id", "size")
 
 
 @admin.register(Product)
@@ -48,7 +48,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ("id", "product")
+    list_display = ("id", "name", "is_main")
 
 
 @admin.register(StoryContent)
