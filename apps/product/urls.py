@@ -4,12 +4,42 @@ from apps.product.views.product import (BrandListView, CategoryListView,
                                         LatestBannersListView, MainSectionView,
                                         NewestProductListView,
                                         PopularCategoryListView,
+                                        PopularSearchedKeywordsListView,
                                         ProductCategoryRetrieveView,
-                                        RecommendedProductListView)
+                                        ProductListView,
+                                        RecommendedProductListView,
+                                        SearchHistoryDeleteView,
+                                        SearchHistoryView,
+                                        SearchKeywordDeleteView)
 from apps.product.views.story import StoryContentRetrieveView, StoryListView
 
 urlpatterns = [
+    path(
+        "search-history/<str:device_id>/",
+        SearchHistoryView.as_view(),
+        name="search-history",
+    ),
+    path(
+        "search-history-delete/<str:device_id>/",
+        SearchHistoryDeleteView.as_view(),
+        name="search-history-delete",
+    ),
+    path(
+        "search-keyword-delete/<str:keyword>/",
+        SearchKeywordDeleteView.as_view(),
+        name="search-keyword-delete",
+    ),
+    path(
+        "popular-search-keywords/",
+        PopularSearchedKeywordsListView.as_view(),
+        name="popular-search-keywords",
+    ),
     path("latest-banners/", LatestBannersListView.as_view(), name="latest-banners"),
+    path(
+        "products/",
+        ProductListView.as_view(),
+        name="products",
+    ),
     path(
         "recommended-products/",
         RecommendedProductListView.as_view(),

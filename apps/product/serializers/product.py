@@ -2,21 +2,21 @@ from rest_framework import serializers
 
 from apps.product.models import (Product, ProductBrand, ProductCategory,
                                  ProductImage, ProductTag, ProductType,
-                                 Section, Volume)
+                                 SearchKeyword, Section, Volume)
 
 
-class ProductCategorySerializer(serializers.ModelSerializer):
+class ChildSectionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductCategory
+        model = Section
         fields = ("id", "name", "icon")
 
 
-class SectionSerializer(serializers.ModelSerializer):
-    category = ProductCategorySerializer()
+class ProductCategorySerializer(serializers.ModelSerializer):
+    section = ChildSectionSerializer(many=True, read_only=True, source="section_category")
 
     class Meta:
-        model = Section
-        fields = ("id", "name", "icon", "category", "is_main")
+        model = ProductCategory
+        fields = ("id", "name", "icon", "section")
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -53,7 +53,7 @@ class VolumeSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     discount_price = serializers.SerializerMethodField(read_only=True, default=0)
-    section = SectionSerializer(many=True)
+    category = ProductCategorySerializer(source="section.category")
     images = ProductImageSerializer(many=True)
     tags = ProductTagSerializer(many=True)
     volume = VolumeSerializer(many=True)
@@ -75,7 +75,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "expire_time",
             "brand",
             "images",
-            "section",
+            "category",
             "tags",
             "type",
             "volume",
@@ -86,3 +86,17 @@ class ProductSerializer(serializers.ModelSerializer):
             price = instance.price
             discount_price = (instance.discount / 100) * price
             return int(discount_price)
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(many=True, read_only=True, source="product_section")
+
+    class Meta:
+        model = Section
+        fields = ("id", "name", "product")
+
+
+class SearchKeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchKeyword
+        fields = ("keyword", "device_id")
