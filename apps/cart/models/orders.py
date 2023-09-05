@@ -1,18 +1,19 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+from apps.common.models import BaseModel
 from apps.product.models import Product
 from apps.user.models import User
 from apps.cart.models.cart import Accreditation  # Assuming Accreditation model is in the same app
 
 
-class Liked(models.Model):
+class Liked(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='liked_product', on_delete=models.CASCADE)
     is_saved = models.BooleanField(default=False)
 
 
-class Order(models.Model):
+class Order(BaseModel):
     class OrderTextChoice(models.TextChoices):
         DELIVERED = 'delivered', 'Delivered'
         DURING_DELIVERY = 'during_delivery', 'During Delivery'
@@ -26,7 +27,7 @@ class Order(models.Model):
     cashback = models.IntegerField()
 
 
-class Review(models.Model):
+class Review(BaseModel):
     user = models.ForeignKey(User, related_name='user_reviews', on_delete=models.CASCADE)
     order = models.ForeignKey(Order, related_name='order_reviews', on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
