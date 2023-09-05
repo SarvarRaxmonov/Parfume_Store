@@ -5,35 +5,47 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0001_initial'),
+        ("cart", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='region',
-            options={'verbose_name': 'Region', 'verbose_name_plural': 'Regions'},
+            name="region",
+            options={"verbose_name": "Region", "verbose_name_plural": "Regions"},
         ),
         migrations.RemoveField(
-            model_name='region',
-            name='district',
+            model_name="region",
+            name="district",
         ),
         migrations.AddField(
-            model_name='accreditation',
-            name='district',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='district', to='cart.district'),
+            model_name="accreditation",
+            name="district",
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="district",
+                to="cart.district",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='district',
-            name='region',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='cart.region'),
+            model_name="district",
+            name="region",
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="cart.region",
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='accreditation',
-            name='region',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='region', to='cart.region'),
+            model_name="accreditation",
+            name="region",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="region",
+                to="cart.region",
+            ),
         ),
     ]
