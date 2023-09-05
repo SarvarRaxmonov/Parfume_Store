@@ -49,6 +49,8 @@ DJANGO_APPS = [
 CUSTOM_APPS = [
     "apps.common",
     "apps.user",
+    "apps.cart",
+    "apps.product",
 ]
 
 THIRD_PARTY_APPS = [
@@ -58,9 +60,7 @@ THIRD_PARTY_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
