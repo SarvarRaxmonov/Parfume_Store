@@ -1,8 +1,9 @@
 from rest_framework.generics import ListAPIView
 
 from apps.product.models import Banner, Product, Story
-from apps.product.serializers import (BannerSerializer, ProductSerializer,
-                                      StorySerializer)
+from apps.product.serializers.banner import BannerSerializer
+from apps.product.serializers.product import ProductSerializer
+from apps.product.serializers.story import StorySerializer
 
 
 class LatestBannersListView(ListAPIView):

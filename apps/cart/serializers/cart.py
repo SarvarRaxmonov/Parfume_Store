@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.cart.models.cart import (Accreditation, BankCard, Cart, District,
-                                     PaymentMethod, Region, UserPhone)
+                                   PaymentMethod, Region, UserPhone)
 
 
 class RegionSerializer(serializers.ModelSerializer):

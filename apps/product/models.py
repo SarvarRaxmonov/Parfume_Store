@@ -56,11 +56,11 @@ class ProductType(models.Model):
 class Volume(models.Model):
     images = models.ManyToManyField(ProductImage)
     size = models.IntegerField(default=0)
-    type = models.CharField(max_length=10, choices=VolumeChoices.choices)
     is_available = models.BooleanField()
+    type = models.CharField(max_length=255, choices=VolumeChoices.choices)
 
     def __str__(self):
-        return f"{self.size} {self.type}"
+        return f"{self.size} {self.is_available}"
 
 
 class Product(BaseModel):
@@ -84,21 +84,14 @@ class Product(BaseModel):
 
 
 class Banner(BaseModel):
+    name = models.CharField(max_length=800, blank=True)
+    description = models.TextField(blank=True)
     image = models.FileField(blank=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, null=True)
+    url = models.URLField()
     is_main = models.BooleanField()
 
     def __str__(self):
-        return f"Banner for {self.product or self.section}"
-
-    def save(self, *args, **kwargs):
-        if self.product and self.section:
-            raise ValidationError("Choose either product or section, not both.")
-        elif not self.section and not self.product:
-            raise ValidationError("Choose either product or section.")
-        else:
-            super().save(*args, **kwargs)
+        return f"{self.name} {self.is_main}"
 
 
 class StoryContent(BaseModel):

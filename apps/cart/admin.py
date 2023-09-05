@@ -1,25 +1,23 @@
 from django.contrib import admin
 
-from apps.cart.models.cart import (Accreditation, BankCard, Cart, District, PaymentMethod,
-                                   Region, UserPhone)
-
-from django.contrib import admin
+from apps.cart.models.cart import (Accreditation, BankCard, Cart, District,
+                                   PaymentMethod, Region, UserPhone)
 from apps.cart.models.orders import Liked, Order, Review
 
 
 @admin.register(Liked)
 class LikedAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'is_saved')
+    list_display = ("user", "product", "is_saved")
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('type', 'accreditation', 'number', 'cashback')
+    list_display = ("type", "accreditation", "number", "cashback")
 
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('user', 'order', 'rating', 'msg')
+    list_display = ("user", "order", "rating", "msg")
 
 
 @admin.register(District)
