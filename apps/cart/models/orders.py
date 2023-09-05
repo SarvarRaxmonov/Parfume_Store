@@ -6,6 +6,7 @@ from apps.cart.models.cart import \
 from apps.common.models import BaseModel
 from apps.product.models import Product
 from apps.user.models import User
+from apps.cart.models.cart import Accreditation  # Assuming Accreditation model is in the same app
 
 
 class Liked(BaseModel):
