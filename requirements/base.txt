@@ -16,4 +16,3 @@ packaging
 Pillow
 psycopg2-binary
 python-environ
-
