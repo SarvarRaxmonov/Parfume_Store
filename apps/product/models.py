@@ -33,7 +33,7 @@ class ProductCategoryViewed(BaseModel):
 class Section(models.Model):
     name = models.CharField(max_length=255)
     icon = models.FileField()
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name="section_category")
     is_main = models.BooleanField()
 
     def __str__(self):
@@ -83,7 +83,13 @@ class Product(BaseModel):
     discount = models.IntegerField(validators=[MaxValueValidator(100)])
     expire_time = models.DateTimeField()
     images = models.ManyToManyField(ProductImage)
-    section = models.ManyToManyField(Section)
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.DO_NOTHING,
+        related_name="product_section",
+        blank=True,
+        null=True,
+    )
     tags = models.ManyToManyField(ProductTag)
     type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
     volume = models.ManyToManyField(Volume, blank=True)
@@ -135,3 +141,8 @@ class ViewedStory(BaseModel):
 
     def __str__(self):
         return self.story.name
+
+
+class SearchKeyword(models.Model):
+    keyword = models.CharField(max_length=1000)
+    device_id = models.CharField(max_length=900)
