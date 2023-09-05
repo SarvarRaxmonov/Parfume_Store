@@ -12,10 +12,10 @@ class LikedSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('type', 'accreditation', 'number', 'cashback')
+        fields = ("type", "accreditation", "number", "cashback")
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('user', 'order', 'rating', 'msg')
+        fields = ("user", "order", "rating", "msg")
