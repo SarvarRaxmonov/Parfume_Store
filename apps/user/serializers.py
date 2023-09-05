@@ -1,6 +1,10 @@
+from django.core import signing
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from apps.user.cache import CacheTypes
 from apps.user.models.users import User
 
 
@@ -21,3 +25,33 @@ class VerificationRegistrationCodeSerializer(SendCodeSerializer):
 
     class Meta(SendCodeSerializer.Meta):  # noqa
         fields = SendCodeSerializer.Meta.fields + ("code", "session")  # noqa
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    phone_number = serializers.CharField()
+    token = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name", "username", "phone_number", "email", "password", "token")
+
+    def get_token(self, user):
+        tokens = RefreshToken.for_user(user)
+        data = {"refresh": str(tokens), "access": str(tokens.access_token)}
+        return data
+
+    def validate(self, attrs):
+        phone_data = attrs.pop("phone_number")
+        signer = signing.TimestampSigner()
+        phone_data = signer.unsign_object(phone_data, max_age=600)
+        if phone_data.get("type") != CacheTypes.registration_sms_verification:
+            raise ValidationError(_("Wrong type!"))
+        attrs["phone_number"] = phone_data.get("phone")
+        return attrs
+
+    def create(self, validated_data):
+        try:
+            user = User.objects.create_user(**validated_data)
+        except Exception as e:
+            raise ValidationError(str(e))
+        return user
