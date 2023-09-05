@@ -46,26 +46,21 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-
 CUSTOM_APPS = [
     "apps.common",
     "apps.user",
-    "apps.product",
-    "apps.cart",
 ]
-
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "phonenumber_field",
     "drf_yasg",
     "corsheaders",
-    "ckeditor",
-    "ckeditor_uploader",
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+    ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",

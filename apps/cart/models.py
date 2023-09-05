@@ -1,36 +1,36 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
 from apps.user.models import User
-
-
-class District(models.Model):
-    name = models.CharField(max_length=125, verbose_name=_("Name"))
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "District"
-        verbose_name_plural = "Districts"
+from django.utils.translation import gettext_lazy as _
 
 
 class Region(models.Model):
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = "Region"
-        verbose_name_plural = "Regionsl"
+        verbose_name = 'Region'
+        verbose_name_plural = 'Regions'
+
+
+class District(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    name = models.CharField(max_length=125, verbose_name=_("Name"))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'District'
+        verbose_name_plural = 'Districts'
 
 
 class Accreditation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    region = models.ForeignKey(Region, related_name='region', on_delete=models.CASCADE)
+    district = models.ForeignKey(District, related_name='district', on_delete=models.CASCADE)
     full_name = models.CharField(max_length=125, verbose_name=_("Full Name"))
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
@@ -64,8 +64,8 @@ class UserPhone(models.Model):
         return self.phone_number
 
     class Meta:
-        verbose_name = "UserPhone"
-        verbose_name_plural = "UserPhones"
+        verbose_name = 'UserPhone'
+        verbose_name_plural = 'UserPhones'
 
 
 class PaymentMethod(models.Model):
@@ -77,13 +77,13 @@ class PaymentMethod(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "PaymentMethod"
-        verbose_name_plural = "PaymentMethods"
+        verbose_name = 'PaymentMethod'
+        verbose_name_plural = 'PaymentMethods'
 
 
 class Cart(models.Model):
     title = models.CharField(max_length=125, verbose_name=_("title"))
-    image = models.ImageField(upload_to="cart_images/", verbose_name=_("image"))
+    image = models.ImageField(upload_to='cart_images/', verbose_name=_("image"))
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("price"))
     count = models.PositiveIntegerField(validators=[MinValueValidator(0)], verbose_name=_("count"))
 
@@ -91,5 +91,5 @@ class Cart(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "Cart"
-        verbose_name_plural = "Carts"
+        verbose_name = 'Cart'
+        verbose_name_plural = 'Carts'
