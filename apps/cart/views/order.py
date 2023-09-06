@@ -17,5 +17,3 @@ class OrderCreateAPIView(generics.CreateAPIView):
 class OrderUpdateAPIView(generics.UpdateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderUpdateSerializer
-
-
