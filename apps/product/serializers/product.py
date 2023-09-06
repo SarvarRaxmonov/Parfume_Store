@@ -89,6 +89,7 @@ class ProductSerializer(serializers.ModelSerializer):
                 return int(discount_price)
         return obj
 
+
 class SectionSerializer(serializers.ModelSerializer):
     product = ProductSerializer(many=True, read_only=True, source="product_section")
 
