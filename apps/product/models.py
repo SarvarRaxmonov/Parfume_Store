@@ -98,6 +98,14 @@ class Product(BaseModel):
         return self.name
 
 
+class ViewedProduct(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="view_to_product")
+    device_id = models.CharField(max_length=900)
+
+    def __str__(self):
+        return self.product.name
+
+
 class Banner(BaseModel):
     name = models.CharField(max_length=800, blank=True)
     description = models.TextField(blank=True)
