@@ -8,7 +8,8 @@ from rest_framework.response import Response
 
 from apps.user.cache import CacheTypes, generate_cache_key
 from apps.user.models import User
-from apps.user.serializers import (RegisterUserSerializer, SendCodeSerializer,
+from apps.user.serializers import (RecoveryCodeSerializer,
+                                   RegisterUserSerializer, SendCodeSerializer,
                                    VerificationRegistrationCodeSerializer)
 from apps.user.shared import send_verification_code
 
@@ -58,3 +59,16 @@ class VerificationRegistrationCodeAPIView(generics.CreateAPIView):
 class RegistrationAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer
+
+
+class RecoveryCodeAPIView(generics.CreateAPIView):
+    serializer_class = RecoveryCodeSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        phone = serializer.validated_data["phone_number"]
+
+        session = "".join(random.choice(string.ascii_lowercase) for _ in range(12))
+        send_verification_code(phone, CacheTypes.registration_sms_verification, session)
+        return Response({"session": session})
