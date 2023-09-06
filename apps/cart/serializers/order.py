@@ -15,6 +15,12 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ("type", "accreditation", "number", "cashback")
 
 
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('type', 'is_delivered')
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review

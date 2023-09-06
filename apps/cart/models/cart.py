@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.models import BaseModel
 from apps.user.models import User
@@ -18,7 +19,11 @@ class Region(BaseModel):
 
 
 class District(BaseModel):
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    region = models.ForeignKey(
+        Region,
+        related_name='district_region',
+        on_delete=models.CASCADE,
+        verbose_name=_("Region"))
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
@@ -30,9 +35,20 @@ class District(BaseModel):
 
 
 class Accreditation(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, related_name="region", on_delete=models.CASCADE)
-    district = models.ForeignKey(District, related_name="district", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("User"))
+    region = models.ForeignKey(
+        Region,
+        related_name="region",
+        on_delete=models.CASCADE,
+        verbose_name=_("Region"))
+    district = models.ForeignKey(
+        District,
+        related_name="district",
+        on_delete=models.CASCADE,
+        verbose_name=_("District"))
     full_name = models.CharField(max_length=125, verbose_name=_("Full Name"))
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
@@ -52,28 +68,47 @@ class Accreditation(BaseModel):
 
 
 class BankCard(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE)
-    number = models.IntegerField(verbose_name=_("number"))
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("User"))
+    accreditation = models.ForeignKey(
+        Accreditation,
+        on_delete=models.CASCADE,
+        verbose_name=_("Accreditation"))
+    number = models.IntegerField(verbose_name=_("Number"))
 
 
 class UserPhone(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=20)  # Adjust the max length as needed
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("User"))
+    accreditation = models.ForeignKey(
+        Accreditation,
+        on_delete=models.CASCADE,
+        verbose_name=_("Accreditation"))
+    phone_number = PhoneNumberField(verbose_name=_("Phone Number"))
 
     def __str__(self):
         return self.phone_number
 
     class Meta:
-        verbose_name = "UserPhone"
-        verbose_name_plural = "UserPhones"
+        verbose_name = "User Phone"
+        verbose_name_plural = "User Phones"
 
 
 class PaymentMethod(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE)
-    name = models.CharField(max_length=125)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("Phone Number")
+    )
+    accreditation = models.ForeignKey(
+        Accreditation,
+        on_delete=models.CASCADE,
+        verbose_name=_("Accreditation"))
+    name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
         return self.name
@@ -84,10 +119,15 @@ class PaymentMethod(BaseModel):
 
 
 class Cart(BaseModel):
-    title = models.CharField(max_length=125, verbose_name=_("title"))
-    image = models.ImageField(upload_to="cart_images/", verbose_name=_("image"))
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("price"))
-    count = models.PositiveIntegerField(validators=[MinValueValidator(0)], verbose_name=_("count"))
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("User")
+    )
+    title = models.CharField(max_length=125, verbose_name=_("Title"))
+    image = models.ImageField(upload_to="cart_images/", verbose_name=_("Image"))
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))
+    count = models.PositiveIntegerField(validators=[MinValueValidator(1)], verbose_name=_("Count"))
 
     def __str__(self):
         return self.title

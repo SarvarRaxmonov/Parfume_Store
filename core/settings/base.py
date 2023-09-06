@@ -124,6 +124,13 @@ DATABASES = {
         "ATOMIC_REQUESTS": True,
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase2', # This is where you put the name of the db file.
+#                  If one doesn't exist, it will be created at migration time.
+    # }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -175,7 +182,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"{env.str('REDIS_URL', 'redis://localhost:6379/0')}",
-        "KEY_PREFIX": "Parfume_Store",
+        "KEY_PREFIX": "boilerplate",  # todo: you must change this with your project name or something else
     }
 }
 

@@ -57,3 +57,9 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ("id", "title", "image", "price", "count")
+
+
+class CartUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = ("count",)

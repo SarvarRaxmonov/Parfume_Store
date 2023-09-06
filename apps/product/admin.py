@@ -3,8 +3,8 @@ from django.contrib import admin
 from apps.product.models import (Banner, Product, ProductBrand,
                                  ProductCategory, ProductCategoryViewed,
                                  ProductImage, ProductTag, ProductType,
-                                 Section, Story, StoryContent, ViewedStory,
-                                 Volume)
+                                 SearchKeyword, Section, Story, StoryContent,
+                                 ViewedStory, Volume)
 
 
 @admin.register(ProductImage)
@@ -70,3 +70,8 @@ class StoryAdmin(admin.ModelAdmin):
 @admin.register(ViewedStory)
 class ViewedStoryAdmin(admin.ModelAdmin):
     list_display = ("story", "device_id")
+
+
+@admin.register(SearchKeyword)
+class SearchKeywordAdmin(admin.ModelAdmin):
+    list_display = ("keyword", "device_id")
