@@ -24,7 +24,10 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ("user", "order", "rating", "msg")
+    list_display = ("user_name", "rating", "msg")
+
+    def user_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
 
 
 @admin.register(District)
@@ -69,4 +72,4 @@ class PaymentMethodAdmin(admin.ModelAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ("title", "price", "count")
+    list_display = ("count",)

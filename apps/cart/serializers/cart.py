@@ -63,7 +63,7 @@ class PaymentMethodSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ("id", "title", "image", "price", "count")
+        fields = ("id", "product", "count")
 
 
 class CartUpdateSerializer(serializers.ModelSerializer):

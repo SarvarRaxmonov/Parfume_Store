@@ -11,6 +11,10 @@ urlpatterns = [
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("products/", include("apps.product.urls")),
     path("cart/", include("apps.cart.urls")),
+
+    # Rosetta
+    path('rosetta/', include('rosetta.urls')),
+
 ]
 
 urlpatterns += swagger_urlpatterns
