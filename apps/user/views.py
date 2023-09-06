@@ -8,9 +8,12 @@ from rest_framework.response import Response
 
 from apps.user.cache import CacheTypes, generate_cache_key
 from apps.user.models import User
-from apps.user.serializers import (RecoveryCodeSerializer,
-                                   RegisterUserSerializer, SendCodeSerializer,
-                                   VerificationRegistrationCodeSerializer)
+from apps.user.serializers import (
+    RecoveryCodeSerializer,
+    RegisterUserSerializer,
+    SendCodeSerializer,
+    VerificationRegistrationCodeSerializer,
+)
 from apps.user.shared import send_verification_code
 
 

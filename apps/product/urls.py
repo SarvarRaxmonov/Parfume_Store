@@ -11,8 +11,9 @@ from apps.product.views.product import (
     ProductDetailView,
     ProductListView,
     RecommendedProductListView,
-    SectionDetailView,
+    RelatedProductsViewSet,
     SameTypedProductsListView,
+    SectionDetailView,
 )
 from apps.product.views.search import (
     PopularSearchedKeywordsListView,
@@ -64,6 +65,11 @@ urlpatterns = [
         "same-typed-products/<int:pk>/",
         SameTypedProductsListView.as_view(),
         name="same-typed-products",
+    ),
+    path(
+        "related-products/<int:product_id>/",
+        RelatedProductsViewSet.as_view(),
+        name="related-products",
     ),
     path("brands/", BrandListView.as_view(), name="brands"),
     path("main-stories/", StoryListView.as_view(), name="main-stories"),
