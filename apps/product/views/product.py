@@ -18,6 +18,7 @@ from apps.product.models import (
 from apps.product.serializers.banner import BannerSerializer
 from apps.product.serializers.product import (
     ChildProductTypeSerializer,
+    ChildSectionSerializer,
     ProductBrandSerializer,
     ProductCategorySerializer,
     ProductSerializer,
@@ -53,7 +54,7 @@ class ProductCategoryRetrieveView(RetrieveAPIView):
     def get(self, request, pk=None, *args, **kwargs):
         queryset = self.get_object()
         device_id = generate_device_id()
-        obj = ProductCategoryViewed.objects.get_or_create(
+        ProductCategoryViewed.objects.get_or_create(
             category=queryset, device_id=device_id
         )
         serializer = self.get_serializer(queryset)
@@ -73,7 +74,7 @@ class ProductDetailView(RetrieveAPIView):
     def get(self, request, pk=None, *args, **kwargs):
         queryset = self.get_object()
         device_id = generate_device_id()
-        obj = ViewedProduct.objects.get_or_create(product=queryset, device_id=device_id)
+        ViewedProduct.objects.get_or_create(product=queryset, device_id=device_id)
         serializer = self.get_serializer(queryset)
         return Response(serializer.data)
 
@@ -101,7 +102,7 @@ class MainSectionView(ListAPIView):
 
 class SectionDetailView(RetrieveAPIView):
     queryset = Section.objects.all()
-    serializer_class = SectionSerializer
+    serializer_class = ChildSectionSerializer
 
 
 class SameTypedProductsListView(RetrieveAPIView):
