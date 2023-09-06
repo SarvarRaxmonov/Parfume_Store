@@ -1,3 +1,5 @@
+import random
+
 from django.db.models import Count
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
@@ -9,17 +11,17 @@ from apps.product.models import (
     ProductBrand,
     ProductCategory,
     ProductCategoryViewed,
+    ProductType,
     Section,
     ViewedProduct,
-    ProductType,
 )
 from apps.product.serializers.banner import BannerSerializer
 from apps.product.serializers.product import (
+    ChildProductTypeSerializer,
     ProductBrandSerializer,
     ProductCategorySerializer,
     ProductSerializer,
     SectionSerializer,
-    ChildProductTypeSerializer,
 )
 from apps.product.utils import generate_device_id
 
@@ -105,3 +107,29 @@ class SectionDetailView(RetrieveAPIView):
 class SameTypedProductsListView(RetrieveAPIView):
     queryset = ProductType
     serializer_class = ChildProductTypeSerializer
+
+
+class RelatedProductsViewSet(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "product_id"
+
+    def get(self, request, product_id=None, *args, **kwargs):
+        try:
+            obj = self.get_queryset().get(id=product_id)
+            selected_product_tags = obj.tags.all()
+            related_products = (
+                self.get_queryset()
+                .filter(tags__in=selected_product_tags)
+                .exclude(id=product_id)
+                .distinct()
+            )
+            related_products_list = list(related_products)
+            random.shuffle(related_products_list)
+            random_related_products = related_products_list[:2]
+            serializer = self.serializer_class(
+                instance=random_related_products, many=True
+            )
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response({"message": "Product not found."}, status=404)
