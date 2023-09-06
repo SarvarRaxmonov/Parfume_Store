@@ -69,13 +69,17 @@ class Accreditation(BaseModel):
 
 class BankCard(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
-    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation"))
+    accreditation = models.ForeignKey(
+        Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation")
+    )
     number = models.IntegerField(verbose_name=_("Number"))
 
 
 class UserPhone(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
-    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation"))
+    accreditation = models.ForeignKey(
+        Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation")
+    )
     phone_number = PhoneNumberField(verbose_name=_("Phone Number"))
 
     def __str__(self):
@@ -87,8 +91,12 @@ class UserPhone(BaseModel):
 
 
 class PaymentMethod(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Phone Number"))
-    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation"))
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name=_("Phone Number")
+    )
+    accreditation = models.ForeignKey(
+        Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation")
+    )
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
@@ -103,8 +111,12 @@ class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
     title = models.CharField(max_length=125, verbose_name=_("Title"))
     image = models.ImageField(upload_to="cart_images/", verbose_name=_("Image"))
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))
-    count = models.PositiveIntegerField(validators=[MinValueValidator(1)], verbose_name=_("Count"))
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name=_("Price")
+    )
+    count = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)], verbose_name=_("Count")
+    )
 
     def __str__(self):
         return self.title

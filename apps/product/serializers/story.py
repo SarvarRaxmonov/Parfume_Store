@@ -20,7 +20,9 @@ class StorySerializer(serializers.ModelSerializer):
 
     def get_is_full_viewed(self, obj):
         device_id = generate_device_id()
-        view = ViewedStory.objects.filter(device_id=device_id, story__story_to_content__id=obj.id)
+        view = ViewedStory.objects.filter(
+            device_id=device_id, story__story_to_content__id=obj.id
+        )
         print(obj.content.count(), view.count())
         if obj.content.count() == view.count():
             return True

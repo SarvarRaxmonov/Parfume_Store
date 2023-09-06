@@ -2,8 +2,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from apps.product.models import Story, StoryContent, ViewedStory
-from apps.product.serializers.story import (StoryContentSerializer,
-                                            StorySerializer)
+from apps.product.serializers.story import StoryContentSerializer, StorySerializer
 from apps.product.utils import generate_device_id
 
 

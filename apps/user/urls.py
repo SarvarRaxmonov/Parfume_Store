@@ -6,6 +6,7 @@ from apps.user.views import (RecoveryCodeAPIView, RegistrationAPIView,
                              SendCodeAPIView,
                              VerificationRegistrationCodeAPIView)
 
+
 urlpatterns = [
     path("login/", TokenObtainPairView.as_view(), name="login"),
     path("refresh/", TokenRefreshView.as_view(), name="refresh_token"),

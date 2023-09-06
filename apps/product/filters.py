@@ -13,10 +13,14 @@ class ProductBrandFilter(django_filters.FilterSet):
 
 
 class ProductFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(field_name="name", lookup_expr="icontains", method="name_filter")
+    name = django_filters.CharFilter(
+        field_name="name", lookup_expr="icontains", method="name_filter"
+    )
     category_ids = django_filters.CharFilter(method="filter_category_ids")
     brand_ids = django_filters.CharFilter(method="filter_brand_ids")
-    discount_on = django_filters.BooleanFilter(field_name="discount", lookup_expr="exact", method="discount_on_filter")
+    discount_on = django_filters.BooleanFilter(
+        field_name="discount", lookup_expr="exact", method="discount_on_filter"
+    )
     min_price = django_filters.NumberFilter(field_name="price", lookup_expr="gt")
     max_price = django_filters.NumberFilter(field_name="price", lookup_expr="lt")
 
@@ -27,7 +31,9 @@ class ProductFilter(django_filters.FilterSet):
     def name_filter(self, queryset, name, value):
         if value:
             device_id = generate_device_id()
-            obj = SearchKeyword.objects.get_or_create(keyword=value, device_id=device_id)
+            obj = SearchKeyword.objects.get_or_create(
+                keyword=value, device_id=device_id
+            )
 
         return queryset
 

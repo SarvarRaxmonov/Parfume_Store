@@ -15,7 +15,9 @@ class SendCodeSerializer(serializers.ModelSerializer):
 
     def validate_phone_number(self, phone_number):
         if User.objects.filter(phone_number=phone_number).exists():
-            raise ValidationError(f"A user with the phone number {phone_number} already exists.")
+            raise ValidationError(
+                f"A user with the phone number {phone_number} already exists."
+            )
         return phone_number
 
 

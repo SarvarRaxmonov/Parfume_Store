@@ -1,14 +1,25 @@
 from django.urls import path
-from apps.product.views.search import PopularSearchedKeywordsListView, SearchHistoryDeleteView, SearchHistoryView, SearchKeywordDeleteView
 
-from apps.product.views.product import (BrandListView, CategoryListView,
-                                        LatestBannersListView, MainSectionView,
-                                        NewestProductListView,
-                                        PopularCategoryListView,
-                                        ProductCategoryRetrieveView,
-                                        ProductDetailView, ProductListView,
-                                        RecommendedProductListView,
-                                        )
+from apps.product.views.product import (
+    BrandListView,
+    CategoryListView,
+    LatestBannersListView,
+    MainSectionView,
+    NewestProductListView,
+    PopularCategoryListView,
+    ProductCategoryRetrieveView,
+    ProductDetailView,
+    ProductListView,
+    RecommendedProductListView,
+    SectionDetailView,
+    SameTypedProductsListView,
+)
+from apps.product.views.search import (
+    PopularSearchedKeywordsListView,
+    SearchHistoryDeleteView,
+    SearchHistoryView,
+    SearchKeywordDeleteView,
+)
 from apps.product.views.story import StoryContentRetrieveView, StoryListView
 
 urlpatterns = [
@@ -49,6 +60,11 @@ urlpatterns = [
         name="recommended-products",
     ),
     path("newest-products/", NewestProductListView.as_view(), name="newest-products"),
+    path(
+        "same-typed-products/<int:pk>/",
+        SameTypedProductsListView.as_view(),
+        name="same-typed-products",
+    ),
     path("brands/", BrandListView.as_view(), name="brands"),
     path("main-stories/", StoryListView.as_view(), name="main-stories"),
     path(
@@ -68,4 +84,7 @@ urlpatterns = [
         name="category-detail",
     ),
     path("main-section/", MainSectionView.as_view(), name="main-section"),
+    path(
+        "section-detail/<int:pk>/", SectionDetailView.as_view(), name="section-detail"
+    ),
 ]

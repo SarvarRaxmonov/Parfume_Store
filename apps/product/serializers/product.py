@@ -1,8 +1,16 @@
 from rest_framework import serializers
 
-from apps.product.models import (Product, ProductBrand, ProductCategory,
-                                 ProductImage, ProductTag, ProductType,
-                                 SearchKeyword, Section, Volume)
+from apps.product.models import (
+    Product,
+    ProductBrand,
+    ProductCategory,
+    ProductImage,
+    ProductTag,
+    ProductType,
+    SearchKeyword,
+    Section,
+    Volume,
+)
 
 
 class ChildSectionSerializer(serializers.ModelSerializer):
@@ -12,7 +20,9 @@ class ChildSectionSerializer(serializers.ModelSerializer):
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
-    section = ChildSectionSerializer(many=True, read_only=True, source="section_category")
+    section = ChildSectionSerializer(
+        many=True, read_only=True, source="section_category"
+    )
 
     class Meta:
         model = ProductCategory
@@ -94,6 +104,14 @@ class PopularProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ("name",)
+
+
+class ChildProductTypeSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True, source="product_type")
+
+    class Meta:
+        model = ProductType
+        fields = ("id", "name", "products")
 
 
 class SectionSerializer(serializers.ModelSerializer):

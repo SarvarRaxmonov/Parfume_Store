@@ -14,8 +14,12 @@ class Notification(BaseModel):
 
 
 class ReadNotification(BaseModel):
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE, verbose_name=_("User"))
-    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, verbose_name=_("Notification"))
+    user = models.ForeignKey(
+        "user.User", on_delete=models.CASCADE, verbose_name=_("User")
+    )
+    notification = models.ForeignKey(
+        Notification, on_delete=models.CASCADE, verbose_name=_("Notification")
+    )
 
     class Meta:
         unique_together = ("user", "notification")
