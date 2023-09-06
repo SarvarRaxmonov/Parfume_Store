@@ -4,7 +4,7 @@ from apps.product.models import (Banner, Product, ProductBrand,
                                  ProductCategory, ProductCategoryViewed,
                                  ProductImage, ProductTag, ProductType,
                                  SearchKeyword, Section, Story, StoryContent,
-                                 ViewedStory, Volume)
+                                 ViewedProduct, ViewedStory, Volume)
 
 
 @admin.register(ProductImage)
@@ -70,6 +70,11 @@ class StoryAdmin(admin.ModelAdmin):
 @admin.register(ViewedStory)
 class ViewedStoryAdmin(admin.ModelAdmin):
     list_display = ("story", "device_id")
+
+
+@admin.register(ViewedProduct)
+class ViewedProductAdmin(admin.ModelAdmin):
+    list_display = ("product", "device_id")
 
 
 @admin.register(SearchKeyword)

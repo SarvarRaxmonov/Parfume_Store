@@ -1,16 +1,14 @@
 from django.urls import path
+from apps.product.views.search import PopularSearchedKeywordsListView, SearchHistoryDeleteView, SearchHistoryView, SearchKeywordDeleteView
 
 from apps.product.views.product import (BrandListView, CategoryListView,
                                         LatestBannersListView, MainSectionView,
                                         NewestProductListView,
                                         PopularCategoryListView,
-                                        PopularSearchedKeywordsListView,
                                         ProductCategoryRetrieveView,
-                                        ProductListView,
+                                        ProductDetailView, ProductListView,
                                         RecommendedProductListView,
-                                        SearchHistoryDeleteView,
-                                        SearchHistoryView,
-                                        SearchKeywordDeleteView)
+                                        )
 from apps.product.views.story import StoryContentRetrieveView, StoryListView
 
 urlpatterns = [
@@ -39,6 +37,11 @@ urlpatterns = [
         "products/",
         ProductListView.as_view(),
         name="products",
+    ),
+    path(
+        "product-detail/<int:pk>/",
+        ProductDetailView.as_view(),
+        name="product-detail",
     ),
     path(
         "recommended-products/",
