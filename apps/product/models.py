@@ -23,7 +23,9 @@ class ProductCategory(models.Model):
 
 
 class ProductCategoryViewed(BaseModel):
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name="view_to_category")
+    category = models.ForeignKey(
+        ProductCategory, on_delete=models.CASCADE, related_name="view_to_category"
+    )
     device_id = models.CharField(max_length=900)
 
     def __str__(self):
@@ -33,7 +35,9 @@ class ProductCategoryViewed(BaseModel):
 class Section(models.Model):
     name = models.CharField(max_length=255)
     icon = models.FileField()
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name="section_category")
+    category = models.ForeignKey(
+        ProductCategory, on_delete=models.CASCADE, related_name="section_category"
+    )
     is_main = models.BooleanField()
 
     def __str__(self):
@@ -87,11 +91,11 @@ class Product(BaseModel):
         Section,
         on_delete=models.DO_NOTHING,
         related_name="product_section",
-        blank=True,
-        null=True,
     )
     tags = models.ManyToManyField(ProductTag)
-    type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
+    type = models.ForeignKey(
+        ProductType, on_delete=models.CASCADE, related_name="product_type"
+    )
     volume = models.ManyToManyField(Volume, blank=True)
 
     def __str__(self):
@@ -99,7 +103,9 @@ class Product(BaseModel):
 
 
 class ViewedProduct(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="view_to_product")
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="view_to_product"
+    )
     device_id = models.CharField(max_length=900)
 
     def __str__(self):

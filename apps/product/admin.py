@@ -1,10 +1,22 @@
 from django.contrib import admin
 
-from apps.product.models import (Banner, Product, ProductBrand,
-                                 ProductCategory, ProductCategoryViewed,
-                                 ProductImage, ProductTag, ProductType,
-                                 SearchKeyword, Section, Story, StoryContent,
-                                 ViewedProduct, ViewedStory, Volume)
+from apps.product.models import (
+    Banner,
+    Product,
+    ProductBrand,
+    ProductCategory,
+    ProductCategoryViewed,
+    ProductImage,
+    ProductTag,
+    ProductType,
+    SearchKeyword,
+    Section,
+    Story,
+    StoryContent,
+    ViewedProduct,
+    ViewedStory,
+    Volume,
+)
 
 
 @admin.register(ProductImage)

@@ -1,9 +1,16 @@
 from django.urls import path
 
-from apps.cart.views.cart import (CartCreateAPIView, CartDestroyAPIView,
-                                  CartListAPIView, CartUpdateAPIView)
-from apps.cart.views.order import (OrderCreateAPIView, OrderListAPIView,
-                                   OrderUpdateAPIView)
+from apps.cart.views.cart import (
+    CartCreateAPIView,
+    CartDestroyAPIView,
+    CartListAPIView,
+    CartUpdateAPIView,
+)
+from apps.cart.views.order import (
+    OrderCreateAPIView,
+    OrderListAPIView,
+    OrderUpdateAPIView,
+)
 
 urlpatterns = [
     # Cart Urls

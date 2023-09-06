@@ -1,9 +1,13 @@
-from rest_framework import status
-from rest_framework.generics import RetrieveDestroyAPIView, ListAPIView
-from apps.product.models import SearchKeyword, Product
-from apps.product.serializers.product import PopularProductsSerializer, SearchKeywordSerializer
 from django.db.models import Count
+from rest_framework import status
+from rest_framework.generics import ListAPIView, RetrieveDestroyAPIView
 from rest_framework.response import Response
+
+from apps.product.models import Product, SearchKeyword
+from apps.product.serializers.product import (
+    PopularProductsSerializer,
+    SearchKeywordSerializer,
+)
 from apps.product.utils import generate_device_id
 
 
@@ -11,7 +15,9 @@ class PopularSearchedKeywordsListView(ListAPIView):
     serializer_class = PopularProductsSerializer
 
     def get_queryset(self):
-        queryset = Product.objects.annotate(view_count=Count("view_to_product")).order_by("-view_count")[:6]
+        queryset = Product.objects.annotate(
+            view_count=Count("view_to_product")
+        ).order_by("-view_count")[:6]
         return queryset
 
 
@@ -52,7 +58,9 @@ class SearchKeywordDeleteView(RetrieveDestroyAPIView):
 
     def destroy(self, request, keyword=None, *args, **kwargs):
         device_id = generate_device_id()
-        deleted_count, _ = self.get_queryset().filter(device_id=device_id, keyword=keyword).delete()
+        deleted_count, _ = (
+            self.get_queryset().filter(device_id=device_id, keyword=keyword).delete()
+        )
         if deleted_count:
             return Response(
                 {"message": f"Deleted {keyword} keyword for device {device_id}"},

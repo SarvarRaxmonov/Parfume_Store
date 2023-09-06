@@ -1,17 +1,27 @@
 from django.db.models import Count
-from rest_framework.generics import (ListAPIView, RetrieveAPIView)
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from apps.product.utils import generate_device_id
-from apps.product.filters import ProductBrandFilter, ProductFilter
-from apps.product.models import (Banner, Product, ProductBrand,
-                                 ProductCategory, ProductCategoryViewed,
-                                 Section, ViewedProduct)
-from apps.product.serializers.banner import BannerSerializer
-from apps.product.serializers.product import (ProductBrandSerializer,
-                                              ProductCategorySerializer,
-                                              ProductSerializer,
-                                              SectionSerializer)
 
+from apps.product.filters import ProductBrandFilter, ProductFilter
+from apps.product.models import (
+    Banner,
+    Product,
+    ProductBrand,
+    ProductCategory,
+    ProductCategoryViewed,
+    Section,
+    ViewedProduct,
+    ProductType,
+)
+from apps.product.serializers.banner import BannerSerializer
+from apps.product.serializers.product import (
+    ProductBrandSerializer,
+    ProductCategorySerializer,
+    ProductSerializer,
+    SectionSerializer,
+    ChildProductTypeSerializer,
+)
+from apps.product.utils import generate_device_id
 
 
 class LatestBannersListView(ListAPIView):
@@ -28,7 +38,9 @@ class PopularCategoryListView(ListAPIView):
     serializer_class = ProductCategorySerializer
 
     def get_queryset(self):
-        queryset = ProductCategory.objects.annotate(view_count=Count("view_to_category")).order_by("-view_count")[:6]
+        queryset = ProductCategory.objects.annotate(
+            view_count=Count("view_to_category")
+        ).order_by("-view_count")[:6]
         return queryset
 
 
@@ -39,7 +51,9 @@ class ProductCategoryRetrieveView(RetrieveAPIView):
     def get(self, request, pk=None, *args, **kwargs):
         queryset = self.get_object()
         device_id = generate_device_id()
-        obj = ProductCategoryViewed.objects.get_or_create(category=queryset, device_id=device_id)
+        obj = ProductCategoryViewed.objects.get_or_create(
+            category=queryset, device_id=device_id
+        )
         serializer = self.get_serializer(queryset)
         return Response(serializer.data)
 
@@ -87,3 +101,7 @@ class SectionDetailView(RetrieveAPIView):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
+
+class SameTypedProductsListView(RetrieveAPIView):
+    queryset = ProductType
+    serializer_class = ChildProductTypeSerializer
