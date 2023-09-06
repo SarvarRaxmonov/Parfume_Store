@@ -81,12 +81,13 @@ class ProductSerializer(serializers.ModelSerializer):
             "volume",
         )
 
-    def get_discount_price(self, instance):
-        if instance.discount > 0:
-            price = instance.price
-            discount_price = (instance.discount / 100) * price
-            return int(discount_price)
-
+    def get_discount_price(self, obj):
+        if obj:
+            if obj.discount > 0:
+                price = obj.price
+                discount_price = (obj.discount / 100) * price
+                return int(discount_price)
+        return obj
 
 class SectionSerializer(serializers.ModelSerializer):
     product = ProductSerializer(many=True, read_only=True, source="product_section")
