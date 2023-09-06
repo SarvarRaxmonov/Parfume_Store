@@ -15,22 +15,16 @@ class SendCodeSerializer(serializers.ModelSerializer):
 
     def validate_phone_number(self, phone_number):
         if User.objects.filter(phone_number=phone_number).exists():
-            raise ValidationError(
-                f"A user with the phone number {phone_number} already exists."
-            )
+            raise ValidationError(f"A user with the phone number {phone_number} already exists.")
         return phone_number
 
 
-class VerificationRegistrationCodeSerializer(SendCodeSerializer):  # noqa
+class VerificationRegistrationCodeSerializer(SendCodeSerializer):
     code = serializers.CharField()
     session = serializers.CharField()
 
-    class Meta(SendCodeSerializer.Meta):  # noqa
-        fields = SendCodeSerializer.Meta.fields + ["code", "session"]  # noqa
-
-    def validate(self, attrs):
-        print(attrs)
-        return attrs
+    class Meta(SendCodeSerializer.Meta):
+        fields = SendCodeSerializer.Meta.fields + ["code", "session"]
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -40,7 +34,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "first_name", "phone_number", "password", "token")
-
 
     def get_token(self, user):
         tokens = RefreshToken.for_user(user)
