@@ -7,7 +7,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from apps.user.cache import CacheTypes, generate_cache_key
-from apps.user.serializers import (SendCodeSerializer,
+from apps.user.models import User
+from apps.user.serializers import (RegisterUserSerializer, SendCodeSerializer,
                                    VerificationRegistrationCodeSerializer)
 from apps.user.shared import send_verification_code
 
@@ -52,3 +53,8 @@ class VerificationRegistrationCodeAPIView(generics.CreateAPIView):
         if valid_code != code:
             return False
         return True
+
+
+class RegistrationAPIView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterUserSerializer
