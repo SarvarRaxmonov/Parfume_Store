@@ -1,3 +1,5 @@
+import random
+
 from django.db.models import Count
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
@@ -9,17 +11,18 @@ from apps.product.models import (
     ProductBrand,
     ProductCategory,
     ProductCategoryViewed,
+    ProductType,
     Section,
     ViewedProduct,
-    ProductType,
 )
 from apps.product.serializers.banner import BannerSerializer
 from apps.product.serializers.product import (
+    ChildProductTypeSerializer,
+    ChildSectionSerializer,
     ProductBrandSerializer,
     ProductCategorySerializer,
     ProductSerializer,
     SectionSerializer,
-    ChildProductTypeSerializer,
 )
 from apps.product.utils import generate_device_id
 
@@ -51,7 +54,7 @@ class ProductCategoryRetrieveView(RetrieveAPIView):
     def get(self, request, pk=None, *args, **kwargs):
         queryset = self.get_object()
         device_id = generate_device_id()
-        obj = ProductCategoryViewed.objects.get_or_create(
+        ProductCategoryViewed.objects.get_or_create(
             category=queryset, device_id=device_id
         )
         serializer = self.get_serializer(queryset)
@@ -71,7 +74,7 @@ class ProductDetailView(RetrieveAPIView):
     def get(self, request, pk=None, *args, **kwargs):
         queryset = self.get_object()
         device_id = generate_device_id()
-        obj = ViewedProduct.objects.get_or_create(product=queryset, device_id=device_id)
+        ViewedProduct.objects.get_or_create(product=queryset, device_id=device_id)
         serializer = self.get_serializer(queryset)
         return Response(serializer.data)
 
@@ -99,9 +102,35 @@ class MainSectionView(ListAPIView):
 
 class SectionDetailView(RetrieveAPIView):
     queryset = Section.objects.all()
-    serializer_class = SectionSerializer
+    serializer_class = ChildSectionSerializer
 
 
 class SameTypedProductsListView(RetrieveAPIView):
     queryset = ProductType
     serializer_class = ChildProductTypeSerializer
+
+
+class RelatedProductsViewSet(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "product_id"
+
+    def get(self, request, product_id=None, *args, **kwargs):
+        try:
+            obj = self.get_queryset().get(id=product_id)
+            selected_product_tags = obj.tags.all()
+            related_products = (
+                self.get_queryset()
+                .filter(tags__in=selected_product_tags)
+                .exclude(id=product_id)
+                .distinct()
+            )
+            related_products_list = list(related_products)
+            random.shuffle(related_products_list)
+            random_related_products = related_products_list[:2]
+            serializer = self.serializer_class(
+                instance=random_related_products, many=True
+            )
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response({"message": "Product not found."}, status=404)

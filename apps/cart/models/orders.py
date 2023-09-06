@@ -53,8 +53,12 @@ class Order(BaseModel):
 
 class Review(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order = models.ForeignKey(
-        Order, related_name="order_reviews", on_delete=models.CASCADE
+    product = models.ForeignKey(
+        Product,
+        related_name='product_review',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
     rating = models.PositiveIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(5)]
@@ -62,7 +66,7 @@ class Review(BaseModel):
     msg = models.TextField()
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.first_name} {self.user.last_name}"
 
     class Meta:
         verbose_name = "Review"

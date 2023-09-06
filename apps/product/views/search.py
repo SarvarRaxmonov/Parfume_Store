@@ -1,6 +1,6 @@
 from django.db.models import Count
 from rest_framework import status
-from rest_framework.generics import ListAPIView, RetrieveDestroyAPIView
+from rest_framework.generics import DestroyAPIView, ListAPIView
 from rest_framework.response import Response
 
 from apps.product.models import Product, SearchKeyword
@@ -32,7 +32,7 @@ class SearchHistoryView(ListAPIView):
         return Response(serializer.data)
 
 
-class SearchHistoryDeleteView(RetrieveDestroyAPIView):
+class SearchHistoryDeleteView(DestroyAPIView):
     queryset = SearchKeyword.objects.all()
     serializer_class = SearchKeywordSerializer
     lookup_field = "device_id"
@@ -51,7 +51,7 @@ class SearchHistoryDeleteView(RetrieveDestroyAPIView):
             )
 
 
-class SearchKeywordDeleteView(RetrieveDestroyAPIView):
+class SearchKeywordDeleteView(DestroyAPIView):
     queryset = SearchKeyword.objects.all()
     serializer_class = SearchKeywordSerializer
     lookup_field = "keyword"

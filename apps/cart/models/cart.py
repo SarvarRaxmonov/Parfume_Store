@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.models import BaseModel
+from apps.product.models import Product
 from apps.user.models import User
 
 
@@ -109,17 +110,19 @@ class PaymentMethod(BaseModel):
 
 class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
-    title = models.CharField(max_length=125, verbose_name=_("Title"))
-    image = models.ImageField(upload_to="cart_images/", verbose_name=_("Image"))
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name=_("Price")
+    product = models.ForeignKey(
+        Product,
+        related_name='cart_product',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
     count = models.PositiveIntegerField(
         validators=[MinValueValidator(1)], verbose_name=_("Count")
     )
 
     def __str__(self):
-        return self.title
+        return self.product.name
 
     class Meta:
         verbose_name = "Cart"
