@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from apps.cart.models.cart import Accreditation, BankCard, Cart, District, PaymentMethod, Region, UserPhone
+from apps.cart.models.cart import (Accreditation, BankCard, Cart, District,
+                                   PaymentMethod, Region, UserPhone)
 from apps.cart.models.orders import Liked, Order, Review
 
 

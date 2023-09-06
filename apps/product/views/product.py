@@ -1,5 +1,3 @@
-from collections import Counter
-
 from django.db.models import Count
 from rest_framework import status
 from rest_framework.generics import (ListAPIView, RetrieveAPIView,
@@ -9,9 +7,10 @@ from rest_framework.response import Response
 from apps.product.filters import ProductBrandFilter, ProductFilter
 from apps.product.models import (Banner, Product, ProductBrand,
                                  ProductCategory, ProductCategoryViewed,
-                                 SearchKeyword, Section)
+                                 SearchKeyword, Section, ViewedProduct)
 from apps.product.serializers.banner import BannerSerializer
-from apps.product.serializers.product import (ProductBrandSerializer,
+from apps.product.serializers.product import (PopularProductsSerializer,
+                                              ProductBrandSerializer,
                                               ProductCategorySerializer,
                                               ProductSerializer,
                                               SearchKeywordSerializer,
@@ -55,6 +54,18 @@ class ProductListView(ListAPIView):
     filterset_class = ProductFilter
 
 
+class ProductDetailView(RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request, pk=None, *args, **kwargs):
+        queryset = self.get_object()
+        device_id = generate_device_id()
+        obj = ViewedProduct.objects.get_or_create(product=queryset, device_id=device_id)
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)
+
+
 class RecommendedProductListView(ListAPIView):
     queryset = Product.objects.exclude(is_recommended=False)
     serializer_class = ProductSerializer
@@ -77,14 +88,11 @@ class MainSectionView(ListAPIView):
 
 
 class PopularSearchedKeywordsListView(ListAPIView):
-    queryset = SearchKeyword.objects.all()
-    serializer_class = SearchKeywordSerializer
+    serializer_class = PopularProductsSerializer
 
-    def get(self, request, *args, **kwargs):
-        obj = self.get_queryset().values_list("keyword", flat=True)
-        keyword_counts = Counter(obj)
-        top_keywords = keyword_counts.most_common(10)
-        return Response(top_keywords)
+    def get_queryset(self):
+        queryset = Product.objects.annotate(view_count=Count("view_to_product")).order_by("-view_count")[:6]
+        return queryset
 
 
 class SearchHistoryView(ListAPIView):

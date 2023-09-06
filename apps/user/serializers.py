@@ -33,7 +33,16 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "first_name", "last_name", "username", "phone_number", "email", "password", "token")
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "phone_number",
+            "email",
+            "password",
+            "token",
+        )
 
     def get_token(self, user):
         tokens = RefreshToken.for_user(user)

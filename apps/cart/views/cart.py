@@ -1,7 +1,8 @@
 from rest_framework import generics
 
 from apps.cart.models.cart import Cart, Region
-from apps.cart.serializers.cart import CartSerializer, CartUpdateSerializer, RegionSerializer
+from apps.cart.serializers.cart import (CartSerializer, CartUpdateSerializer,
+                                        RegionSerializer)
 
 
 class CartListAPIView(generics.ListAPIView):
