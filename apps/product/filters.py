@@ -13,10 +13,9 @@ class ProductBrandFilter(django_filters.FilterSet):
 
 
 class ProductFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(
-        field_name="name", lookup_expr="icontains", method="name_filter"
-    )
+    name = django_filters.CharFilter(field_name="name", method="name_filter")
     category_ids = django_filters.CharFilter(method="filter_category_ids")
+    section_ids = django_filters.CharFilter(method="filter_section_ids")
     brand_ids = django_filters.CharFilter(method="filter_brand_ids")
     discount_on = django_filters.BooleanFilter(
         field_name="discount", lookup_expr="exact", method="discount_on_filter"
@@ -31,11 +30,8 @@ class ProductFilter(django_filters.FilterSet):
     def name_filter(self, queryset, name, value):
         if value:
             device_id = generate_device_id()
-            obj = SearchKeyword.objects.get_or_create(
-                keyword=value, device_id=device_id
-            )
-
-        return queryset
+            SearchKeyword.objects.get_or_create(keyword=value, device_id=device_id)
+        return queryset.filter(name__icontains=value)
 
     def discount_on_filter(self, queryset, name, value):
         if value is True:
@@ -45,6 +41,10 @@ class ProductFilter(django_filters.FilterSet):
     def filter_category_ids(self, queryset, name, value):
         ids_list = value.split(",")
         return queryset.filter(section__category__id__in=ids_list)
+
+    def filter_section_ids(self, queryset, name, value):
+        ids_list = value.split(",")
+        return queryset.filter(section__id__in=ids_list)
 
     def filter_brand_ids(self, queryset, name, value):
         ids_list = value.split(",")
