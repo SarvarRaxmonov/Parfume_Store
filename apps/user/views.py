@@ -3,14 +3,15 @@ import string
 
 from django.core import signing
 from django.core.cache import cache
-from rest_framework import generics, status
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from apps.user.cache import CacheTypes, generate_cache_key
-from apps.user.models import User
+from apps.user.models import Profile, User
 from apps.user.serializers import (RecoveryCodeSerializer,
                                    RecoverySetPasswordSerializer,
                                    RegisterUserSerializer, SendCodeSerializer,
+                                   UserProfileSerializer,
                                    VerificationRecoverySerializer,
                                    VerificationRegistrationCodeSerializer)
 from apps.user.shared import send_verification_code
@@ -105,5 +106,35 @@ class VerificationRecoveryAPIView(generics.CreateAPIView):
 
 
 class RecoverySetPasswordAPIView(generics.CreateAPIView):
-    # queryset = User.objects.all()
     serializer_class = RecoverySetPasswordSerializer
+
+
+class UserProfileAPIView(generics.RetrieveAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        # Retrieve and return the user's profile based on the request user
+        return Profile.objects.get(user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        profile = self.get_object()
+
+        serializer = self.serializer_class(profile)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserProfileUpdateView(generics.UpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def put(self, request, *args, **kwargs):
+        profile = Profile.objects.get(user=self.request.user)
+        serializer = self.serializer_class(profile, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

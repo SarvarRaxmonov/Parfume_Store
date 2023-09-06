@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.user.cache import CacheTypes
-from apps.user.models.users import User
+from apps.user.models.users import Profile, User
 
 
 class SendCodeSerializer(serializers.ModelSerializer):
@@ -96,3 +96,32 @@ class RecoverySetPasswordSerializer(serializers.Serializer):
         except Exception as e:
             raise ValidationError(str(e))
         return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name")
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Profile
+        fields = ("id", "user", "avatar", "region", "address")
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", {})
+
+        user = instance.user
+        user.first_name = user_data.get("first_name", user.first_name)
+        user.last_name = user_data.get("last_name", user.last_name)
+        user.save()
+
+        instance.avatar = validated_data.get("avatar", instance.avatar)
+        instance.region = validated_data.get("region", instance.region)
+        instance.address = validated_data.get("address", instance.address)
+        instance.save()
+
+        return instance
