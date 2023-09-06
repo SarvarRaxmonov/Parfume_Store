@@ -11,7 +11,7 @@ from apps.user.models.users import User
 class SendCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "phone_number")
+        fields = ["id", "phone_number"]
 
     def validate_phone_number(self, phone_number):
         if User.objects.filter(phone_number=phone_number).exists():
@@ -21,12 +21,16 @@ class SendCodeSerializer(serializers.ModelSerializer):
         return phone_number
 
 
-class VerificationRegistrationCodeSerializer(SendCodeSerializer):
+class VerificationRegistrationCodeSerializer(SendCodeSerializer):  # noqa
     code = serializers.CharField()
     session = serializers.CharField()
 
     class Meta(SendCodeSerializer.Meta):  # noqa
-        fields = SendCodeSerializer.Meta.fields + ("code", "session")  # noqa
+        fields = SendCodeSerializer.Meta.fields + ["code", "session"]  # noqa
+
+    def validate(self, attrs):
+        print(attrs)
+        return attrs
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -35,16 +39,8 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            "id",
-            "first_name",
-            "last_name",
-            "username",
-            "phone_number",
-            "email",
-            "password",
-            "token",
-        )
+        fields = ("id", "first_name", "phone_number", "password", "token")
+
 
     def get_token(self, user):
         tokens = RefreshToken.for_user(user)
@@ -66,3 +62,13 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         except Exception as e:
             raise ValidationError(str(e))
         return user
+
+
+class RecoveryCodeSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+
+    def validate(self, attrs):
+        phone_number = attrs.get("phone_number")
+        if not User.objects.filter(phone_number=phone_number).exists():
+            raise ValidationError("This user does not exists. ")
+        return attrs
