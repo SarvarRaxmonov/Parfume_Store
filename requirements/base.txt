@@ -17,3 +17,6 @@ Pillow
 psycopg2-binary
 python-environ
 django-filter==23.2
+redis
+djangorestframework-simplejwt
+django-phonenumber-field[phonenumberslite]

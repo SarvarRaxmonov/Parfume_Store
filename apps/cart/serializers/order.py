@@ -18,7 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('type', 'is_delivered')
+        fields = ("type", "is_delivered")
 
 
 class ReviewSerializer(serializers.ModelSerializer):

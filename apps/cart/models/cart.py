@@ -20,10 +20,8 @@ class Region(BaseModel):
 
 class District(BaseModel):
     region = models.ForeignKey(
-        Region,
-        related_name='district_region',
-        on_delete=models.CASCADE,
-        verbose_name=_("Region"))
+        Region, related_name="district_region", on_delete=models.CASCADE, verbose_name=_("Region")
+    )
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
@@ -35,20 +33,11 @@ class District(BaseModel):
 
 
 class Accreditation(BaseModel):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name=_("User"))
-    region = models.ForeignKey(
-        Region,
-        related_name="region",
-        on_delete=models.CASCADE,
-        verbose_name=_("Region"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    region = models.ForeignKey(Region, related_name="region", on_delete=models.CASCADE, verbose_name=_("Region"))
     district = models.ForeignKey(
-        District,
-        related_name="district",
-        on_delete=models.CASCADE,
-        verbose_name=_("District"))
+        District, related_name="district", on_delete=models.CASCADE, verbose_name=_("District")
+    )
     full_name = models.CharField(max_length=125, verbose_name=_("Full Name"))
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
@@ -68,26 +57,14 @@ class Accreditation(BaseModel):
 
 
 class BankCard(BaseModel):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name=_("User"))
-    accreditation = models.ForeignKey(
-        Accreditation,
-        on_delete=models.CASCADE,
-        verbose_name=_("Accreditation"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation"))
     number = models.IntegerField(verbose_name=_("Number"))
 
 
 class UserPhone(BaseModel):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name=_("User"))
-    accreditation = models.ForeignKey(
-        Accreditation,
-        on_delete=models.CASCADE,
-        verbose_name=_("Accreditation"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation"))
     phone_number = PhoneNumberField(verbose_name=_("Phone Number"))
 
     def __str__(self):
@@ -99,15 +76,8 @@ class UserPhone(BaseModel):
 
 
 class PaymentMethod(BaseModel):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name=_("Phone Number")
-    )
-    accreditation = models.ForeignKey(
-        Accreditation,
-        on_delete=models.CASCADE,
-        verbose_name=_("Accreditation"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Phone Number"))
+    accreditation = models.ForeignKey(Accreditation, on_delete=models.CASCADE, verbose_name=_("Accreditation"))
     name = models.CharField(max_length=125, verbose_name=_("Name"))
 
     def __str__(self):
@@ -119,11 +89,7 @@ class PaymentMethod(BaseModel):
 
 
 class Cart(BaseModel):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name=_("User")
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
     title = models.CharField(max_length=125, verbose_name=_("Title"))
     image = models.ImageField(upload_to="cart_images/", verbose_name=_("Image"))
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))

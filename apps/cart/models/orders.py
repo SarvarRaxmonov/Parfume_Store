@@ -1,8 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from apps.cart.models.cart import \
-    Accreditation  # Assuming Accreditation model is in the same app
+from apps.cart.models.cart import Accreditation  # Assuming Accreditation model is in the same app
 from apps.common.models import BaseModel
 from apps.product.models import Product
 from apps.user.models import User
@@ -28,10 +27,7 @@ class Order(BaseModel):
         DURING_DELIVERY = "during_delivery", "During Delivery"
         CANCELED = "canceled", "Canceled"
 
-    type = models.CharField(
-        max_length=15,
-        choices=OrderTextChoice.choices,
-        default=OrderTextChoice.DURING_DELIVERY)
+    type = models.CharField(max_length=15, choices=OrderTextChoice.choices, default=OrderTextChoice.DURING_DELIVERY)
     accreditation = models.ForeignKey(Accreditation, related_name="order_accreditation", on_delete=models.CASCADE)
     number = models.IntegerField(unique=True)
     cashback = models.IntegerField()
