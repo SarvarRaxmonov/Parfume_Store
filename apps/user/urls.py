@@ -1,12 +1,11 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from apps.user.views import (
-    RecoveryCodeAPIView,
-    RegistrationAPIView,
-    SendCodeAPIView,
-    VerificationRegistrationCodeAPIView,
-)
+from apps.user.views import (RecoveryCodeAPIView, RecoverySetPasswordAPIView,
+                             RegistrationAPIView, SendCodeAPIView,
+                             UserProfileAPIView, UserProfileUpdateView,
+                             VerificationRecoveryAPIView,
+                             VerificationRegistrationCodeAPIView)
 
 
 urlpatterns = [
@@ -20,4 +19,8 @@ urlpatterns = [
     ),
     path("registration/", RegistrationAPIView.as_view(), name="user_register"),
     path("send-recovery/", RecoveryCodeAPIView.as_view(), name="send_recovery"),
+    path("recovery-verify/", VerificationRecoveryAPIView.as_view(), name="recovery_verify"),
+    path("recovery-set-password/", RecoverySetPasswordAPIView.as_view(), name="recovery_verify"),
+    path("profile/", UserProfileAPIView.as_view(), name="profile"),
+    path("profile/edit/", UserProfileUpdateView.as_view(), name="profile_edit"),
 ]

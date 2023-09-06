@@ -43,9 +43,7 @@ class User(AbstractUser, BaseModel):
         unique=True,
     )
 
-    username = models.CharField(
-        verbose_name=_("username"), max_length=150, unique=True, blank=True, null=True
-    )
+    username = models.CharField(verbose_name=_("username"), max_length=150, unique=True, blank=True, null=True)
     email = models.EmailField(verbose_name=_("Email"), null=True, blank=True)
 
     objects = UserManager()
@@ -68,28 +66,24 @@ class User(AbstractUser, BaseModel):
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField(
-        "User", on_delete=models.CASCADE, related_name="profile"
-    )
-    avatar = models.ImageField(
-        verbose_name=_("Avatar"), upload_to="profile/pictures", null=True, blank=True
-    )
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="profile")
+    avatar = models.ImageField(verbose_name=_("Avatar"), upload_to="profile/pictures", null=True, blank=True)
     region = models.ForeignKey(
         "user.Region",
         related_name="profile",
         on_delete=models.CASCADE,
         verbose_name=_("Region"),
+        null=True,
+        blank=True,
     )
-    address = models.CharField(
-        verbose_name=_("Address"), max_length=255, null=True, blank=True
-    )
+    address = models.CharField(verbose_name=_("Address"), max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Profile")
         verbose_name_plural = _("Profiles")
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.phone_number}"
 
 
 class Region(BaseModel):
