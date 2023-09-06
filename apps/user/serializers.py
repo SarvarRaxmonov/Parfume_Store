@@ -65,3 +65,34 @@ class RecoveryCodeSerializer(serializers.Serializer):
         if not User.objects.filter(phone_number=phone_number).exists():
             raise ValidationError("This user does not exists. ")
         return attrs
+
+
+class VerificationRecoverySerializer(RecoveryCodeSerializer):
+    code = serializers.CharField()
+    session = serializers.CharField()
+
+
+class RecoverySetPasswordSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        phone_data = attrs.pop("phone_number")
+        signer = signing.TimestampSigner()
+        phone_data = signer.unsign_object(phone_data, max_age=600)
+        print(phone_data)
+        if phone_data.get("type") != CacheTypes.forget_pass_verification:
+            raise ValidationError(_("Wrong type!"))
+        attrs["phone_number"] = phone_data.get("phone")
+        return attrs
+
+    def create(self, validated_data):
+        try:
+            phone = validated_data.get("phone_number")
+            password = validated_data.get("password")
+            user = User.objects.get(phone_number=phone)
+            user.set_password(password)
+            user.save()
+        except Exception as e:
+            raise ValidationError(str(e))
+        return user

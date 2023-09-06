@@ -9,7 +9,9 @@ from rest_framework.response import Response
 from apps.user.cache import CacheTypes, generate_cache_key
 from apps.user.models import User
 from apps.user.serializers import (RecoveryCodeSerializer,
+                                   RecoverySetPasswordSerializer,
                                    RegisterUserSerializer, SendCodeSerializer,
+                                   VerificationRecoverySerializer,
                                    VerificationRegistrationCodeSerializer)
 from apps.user.shared import send_verification_code
 
@@ -38,19 +40,13 @@ class VerificationRegistrationCodeAPIView(generics.CreateAPIView):
         code = serializer.validated_data.get("code")
         session = serializer.validated_data.get("session")
 
-        cache_key = generate_cache_key(
-            CacheTypes.registration_sms_verification, phone, session
-        )
+        cache_key = generate_cache_key(CacheTypes.registration_sms_verification, phone, session)
 
         if not self.is_code_valid(cache_key, code):
-            return Response(
-                {"detail": "Wrong code!"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"detail": "Wrong code!"}, status=status.HTTP_400_BAD_REQUEST)
 
         signer = signing.TimestampSigner()
-        phone_data = signer.sign_object(
-            {"phone": phone, "type": CacheTypes.registration_sms_verification}
-        )
+        phone_data = signer.sign_object({"phone": phone, "type": CacheTypes.registration_sms_verification})
 
         return Response({"phone": phone_data})
 
@@ -76,5 +72,38 @@ class RecoveryCodeAPIView(generics.CreateAPIView):
         phone = serializer.validated_data["phone_number"]
 
         session = "".join(random.choice(string.ascii_lowercase) for _ in range(12))
-        send_verification_code(phone, CacheTypes.registration_sms_verification, session)
+
+        send_verification_code(phone, CacheTypes.forget_pass_verification, session)
         return Response({"session": session})
+
+
+class VerificationRecoveryAPIView(generics.CreateAPIView):
+    serializer_class = VerificationRecoverySerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        phone = serializer.validated_data.get("phone_number")
+        code = serializer.validated_data.get("code")
+        session = serializer.validated_data.get("session")
+
+        cache_key = generate_cache_key(CacheTypes.forget_pass_verification, phone, session)
+        if not self.is_code_valid(cache_key, code):
+            return Response({"detail": "Wrong code!"}, status=status.HTTP_400_BAD_REQUEST)
+        signer = signing.TimestampSigner()
+        phone_data = signer.sign_object({"phone": phone, "type": CacheTypes.forget_pass_verification})
+
+        return Response({"phone": phone_data})
+
+    @staticmethod
+    def is_code_valid(cache_key, code):
+        valid_code = cache.get(cache_key)
+        if valid_code != code:
+            return False
+        return True
+
+
+class RecoverySetPasswordAPIView(generics.CreateAPIView):
+    # queryset = User.objects.all()
+    serializer_class = RecoverySetPasswordSerializer
