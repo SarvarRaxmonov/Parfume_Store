@@ -41,7 +41,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "first_name", "phone_number", "password", "token")
 
-
     def get_token(self, user):
         tokens = RefreshToken.for_user(user)
         data = {"refresh": str(tokens), "access": str(tokens.access_token)}

@@ -1,10 +1,12 @@
 from django.urls import path
-from rest_framework_simplejwt.views import (TokenObtainPairView,
-                                            TokenRefreshView)
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from apps.user.views import (RecoveryCodeAPIView, RegistrationAPIView,
-                             SendCodeAPIView,
-                             VerificationRegistrationCodeAPIView)
+from apps.user.views import (
+    RecoveryCodeAPIView,
+    RegistrationAPIView,
+    SendCodeAPIView,
+    VerificationRegistrationCodeAPIView,
+)
 
 
 urlpatterns = [
