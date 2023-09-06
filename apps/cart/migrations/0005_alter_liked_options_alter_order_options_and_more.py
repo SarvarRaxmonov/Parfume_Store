@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("cart", "0004_accreditation_created_at_accreditation_updated_at_and_more"),
+        ("cart", "0004_alter_liked_options_alter_order_options_and_more"),
     ]
 
     operations = [
