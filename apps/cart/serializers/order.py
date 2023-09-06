@@ -22,6 +22,11 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Review
-        fields = ("user", "order", "rating", "msg")
+        fields = ("user", "full_name", "rating", "msg")
+
+    def get_full_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"

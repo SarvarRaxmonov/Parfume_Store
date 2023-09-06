@@ -20,3 +20,4 @@ django-filter==23.2
 redis
 djangorestframework-simplejwt
 django-phonenumber-field[phonenumberslite]
+django-rosetta

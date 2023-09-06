@@ -14,11 +14,13 @@ from datetime import timedelta
 from pathlib import Path
 
 import environ
+from django.utils.translation import gettext_lazy as _
 
 from core.ckeditor import *  # noqa
 from core.jazzmin_conf import *  # noqa
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside tfrom django.utils.translation import gettext_lazy as _
+# he project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # READING ENV
@@ -62,8 +64,8 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "ckeditor",
     "ckeditor_uploader",
+    "rosetta"
 ]
-
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -80,6 +82,7 @@ REST_FRAMEWORK = {
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
+    'django.middleware.locale.LocaleMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -143,6 +146,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+    ('uz', _('Uzbek')),
+    # Add more languages as needed
+]
 
 TIME_ZONE = "Asia/Tashkent"
 
