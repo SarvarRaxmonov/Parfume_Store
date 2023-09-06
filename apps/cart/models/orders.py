@@ -23,14 +23,19 @@ class Liked(BaseModel):
 
 class Order(BaseModel):
     class OrderTextChoice(models.TextChoices):
+        ACCEPTED = "accepted", "Accepted"
         DELIVERED = "delivered", "Delivered"
         DURING_DELIVERY = "during_delivery", "During Delivery"
         CANCELED = "canceled", "Canceled"
 
-    type = models.CharField(max_length=15, choices=OrderTextChoice.choices)
+    type = models.CharField(
+        max_length=15,
+        choices=OrderTextChoice.choices,
+        default=OrderTextChoice.DURING_DELIVERY)
     accreditation = models.ForeignKey(Accreditation, related_name="order_accreditation", on_delete=models.CASCADE)
     number = models.IntegerField(unique=True)
     cashback = models.IntegerField()
+    is_delivered = models.BooleanField(default=False)
 
     def __str__(self):
         return self.type
@@ -41,7 +46,7 @@ class Order(BaseModel):
 
 
 class Review(BaseModel):
-    user = models.ForeignKey(User, related_name="user_reviews", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, related_name="order_reviews", on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
     msg = models.TextField()
