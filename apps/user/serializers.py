@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.user.cache import CacheTypes
+from apps.user.models.notifications import Notification, ReadNotification
 from apps.user.models.users import Profile, User
 
 
@@ -125,3 +126,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ReadNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReadNotification
+        fields = (
+            "user",
+            "notification",
+            "created_at",
+            "updated_at",
+        )
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ("title", "content", "created_at")

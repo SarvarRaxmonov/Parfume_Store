@@ -1,12 +1,15 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
-from apps.user.views import (RecoveryCodeAPIView, RecoverySetPasswordAPIView,
-                             RegistrationAPIView, SendCodeAPIView,
-                             UserProfileAPIView, UserProfileUpdateView,
+from apps.user.views import (NotificationsAPIView,
+                             ReadDetailNotificationAPIView,
+                             ReadNotificationsAPIView, RecoveryCodeAPIView,
+                             RecoverySetPasswordAPIView, RegistrationAPIView,
+                             SendCodeAPIView, UserProfileAPIView,
+                             UserProfileUpdateView,
                              VerificationRecoveryAPIView,
                              VerificationRegistrationCodeAPIView)
-
 
 urlpatterns = [
     path("login/", TokenObtainPairView.as_view(), name="login"),
@@ -23,4 +26,7 @@ urlpatterns = [
     path("recovery-set-password/", RecoverySetPasswordAPIView.as_view(), name="recovery_verify"),
     path("profile/", UserProfileAPIView.as_view(), name="profile"),
     path("profile/edit/", UserProfileUpdateView.as_view(), name="profile_edit"),
+    path("notifications/", NotificationsAPIView.as_view(), name="all_notifications"),
+    path("read-notifications/", ReadNotificationsAPIView.as_view(), name="read_notifications"),
+    path("detail-notifications/<int:pk>/", ReadDetailNotificationAPIView.as_view(), name="detail_notifications"),
 ]

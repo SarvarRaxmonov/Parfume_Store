@@ -7,8 +7,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from apps.user.cache import CacheTypes, generate_cache_key
-from apps.user.models import Profile, User
-from apps.user.serializers import (RecoveryCodeSerializer,
+from apps.user.models import Notification, Profile, ReadNotification, User
+from apps.user.serializers import (NotificationSerializer,
+                                   ReadNotificationSerializer,
+                                   RecoveryCodeSerializer,
                                    RecoverySetPasswordSerializer,
                                    RegisterUserSerializer, SendCodeSerializer,
                                    UserProfileSerializer,
@@ -138,3 +140,31 @@ class UserProfileUpdateView(generics.UpdateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NotificationsAPIView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    queryset = Notification.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+
+
+class ReadDetailNotificationAPIView(generics.RetrieveAPIView):
+    serializer_class = NotificationSerializer
+    queryset = Notification.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        self.get_or_create_read_notification()
+        return self.retrieve(request, *args, **kwargs)
+
+    def get_or_create_read_notification(self):
+        ReadNotification.objects.get_or_create(user=self.request.user, notification=self.get_object())
+
+
+class ReadNotificationsAPIView(generics.ListAPIView):
+    serializer_class = ReadNotificationSerializer
+    queryset = ReadNotification.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
