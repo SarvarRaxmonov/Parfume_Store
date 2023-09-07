@@ -26,7 +26,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ("user", "product","full_name", "rating", "msg")
+        fields = ("user", "product", "full_name", "rating", "msg")
 
     def get_full_name(self, obj):
         return f"{obj.user.first_name} {obj.user.last_name}"

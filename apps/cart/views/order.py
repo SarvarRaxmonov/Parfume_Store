@@ -1,7 +1,9 @@
 from rest_framework import generics
 
-from apps.cart.models.orders import Order, Review, Liked
-from apps.cart.serializers.order import OrderSerializer, OrderUpdateSerializer, ReviewSerializer, LikedSerializer
+from apps.cart.models.orders import Liked, Order, Review
+from apps.cart.serializers.order import (LikedSerializer, OrderSerializer,
+                                         OrderUpdateSerializer,
+                                         ReviewSerializer)
 
 
 class OrderListAPIView(generics.ListAPIView):

@@ -1,11 +1,8 @@
 from rest_framework import generics
 
 from apps.cart.models.cart import Cart, Region
-from apps.cart.serializers.cart import (
-    CartSerializer,
-    CartUpdateSerializer,
-    RegionSerializer,
-)
+from apps.cart.serializers.cart import (CartSerializer, CartUpdateSerializer,
+                                        RegionSerializer)
 
 
 class CartListAPIView(generics.ListAPIView):
@@ -35,7 +32,6 @@ class RegionListAPIView(generics.ListAPIView):
     # fiter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     # filterset_fields = ['name']
     # search_fields = ['name']
-
 
 
 class RegionCreateAPIView(generics.CreateAPIView):
