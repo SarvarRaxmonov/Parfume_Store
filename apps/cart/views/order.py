@@ -28,6 +28,10 @@ class ReviewListAPIView(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+        return Review.objects.filter(product=pk)
+
 
 class ReviewCreateAPIView(generics.CreateAPIView):
     queryset = Review.objects.all()
