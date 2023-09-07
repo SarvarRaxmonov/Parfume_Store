@@ -1,7 +1,9 @@
 from rest_framework import generics
 
-from apps.cart.models.orders import Order, Review, Liked
-from apps.cart.serializers.order import OrderSerializer, OrderUpdateSerializer, ReviewSerializer, LikedSerializer
+from apps.cart.models.orders import Liked, Order, Review
+from apps.cart.serializers.order import (LikedSerializer, OrderSerializer,
+                                         OrderUpdateSerializer,
+                                         ReviewSerializer)
 
 
 class OrderListAPIView(generics.ListAPIView):
@@ -27,6 +29,10 @@ class LikedListAPIView(generics.ListAPIView):
 class ReviewListAPIView(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+        return Review.objects.filter(product=pk)
 
 
 class ReviewCreateAPIView(generics.CreateAPIView):
