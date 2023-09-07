@@ -19,6 +19,7 @@ class CartUpdateAPIView(generics.UpdateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartUpdateSerializer
 
+    # def
 
 class CartDestroyAPIView(generics.DestroyAPIView):
     queryset = Cart.objects.all()
@@ -29,9 +30,6 @@ class CartDestroyAPIView(generics.DestroyAPIView):
 class RegionListAPIView(generics.ListAPIView):
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
-    # fiter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    # filterset_fields = ['name']
-    # search_fields = ['name']
 
 
 class RegionCreateAPIView(generics.CreateAPIView):
