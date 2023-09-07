@@ -36,6 +36,28 @@ class District(BaseModel):
         verbose_name_plural = "Districts"
 
 
+class Cart(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    product = models.ForeignKey(
+        Product,
+        related_name='cart_product',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    count = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)], verbose_name=_("Count")
+    )
+    is_sale = models.BooleanField(default=False, verbose_name=_("Is Sale"))
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        verbose_name = "Cart"
+        verbose_name_plural = "Carts"
+
+
 class Accreditation(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
     region = models.ForeignKey(
@@ -49,6 +71,10 @@ class Accreditation(BaseModel):
         related_name="district",
         on_delete=models.CASCADE,
         verbose_name=_("District"),
+    )
+    cart = models.ManyToManyField(
+        Cart,
+        related_name='accreditation_cart'
     )
     full_name = models.CharField(max_length=125, verbose_name=_("Full Name"))
     lat = models.DecimalField(max_digits=9, decimal_places=6)
@@ -106,24 +132,3 @@ class PaymentMethod(BaseModel):
     class Meta:
         verbose_name = "PaymentMethod"
         verbose_name_plural = "PaymentMethods"
-
-
-class Cart(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
-    product = models.ForeignKey(
-        Product,
-        related_name='cart_product',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
-    count = models.PositiveIntegerField(
-        validators=[MinValueValidator(1)], verbose_name=_("Count")
-    )
-
-    def __str__(self):
-        return self.product.name
-
-    class Meta:
-        verbose_name = "Cart"
-        verbose_name_plural = "Carts"
